@@ -1,0 +1,15 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+:root{
+    --dark-color: rgb(10, 10, 10);
+    --light-color: rgb(220, 231, 227);
+    --primary-color:rgb(76, 32, 177);
+}
+
+
+

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang='es'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='stylesheet' href='style.css'>  
+    <script src='script.js' defer></script>
+    <title>aventuraenelreinojs</title>
+</head>
+<body>
+
+  <!-- Panel del juego -->
+   <div id="game-container">
+
+        <!--1. Escena Inicial del jugador -->
+        <section id="scene-start" class="game-scene active-scene"> 
+            <h3>¡El Reino de Dragones!</h3>
+            
+            <div id="player-card-initial">
+                <!-- <img src="img/v5.jpg" alt="Avatar de la jugadora" id="player-avatar-img"> -->
+                <p><span id="player-name-start">Vikinga</span></p>
+                
+                <div class="stats-grid">
+                    <div class="stat-box">Ataque: <span id="stat-attack-start">0</span></div>
+                    <div class="stat-box">Defensa: <span id="stat-defense-start">0</span></div>
+                    <div class="stat-box">Vida: <span id="stat-life-start">100</span></div>
+                    <div class="stat-box">Puntos: <span id="stat-points-start">0</span></div>
+                </div>
+                
+                <button id="btn-start-adventure" class="btn-continue">Continuar</button>
+            </div>
+        </section>
+
+
+
+</body>
+</html>
+

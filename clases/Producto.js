@@ -1,5 +1,8 @@
 // Clase Producto
 
+
+
+import { formatCurrency  } from '../utils/utils.js';
 export default class Producto {
     constructor(nombre, imagen, precio, rareza, tipo, bonus) {
         this.nombre = nombre;

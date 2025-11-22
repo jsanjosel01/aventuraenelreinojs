@@ -1,4 +1,4 @@
-// Clase enemigo
+// Clase Enemigo
 
 export class Enemigo {
 

@@ -1,4 +1,4 @@
-// Una subclase Jefe que herede de Enemigo
+// Una subclase Jefe que hereda de Enemigo
 
 import { Enemigo } from './Enemigo.js'; 
 

@@ -1,16 +1,17 @@
 // Mercado
 
 import Producto from '../clases/Producto.js';
+import { RAREZA, TIPO_PRODUCTO} from '../utils/constants.js';
 
 // Listado de los productos del mercado
 const LISTA_PRODUCTOS_ORIGINAL = [
 
-    new Producto("Espada", "img", 1200, RAREZA.RARA, TIPO_PRODUCTO.ARMA, 25),
+    new Producto("Espada", "img", 1200, RAREZA.RARA, TIPO_PRODUCTO.ARMA, 25), //FALTA PONER LAS IMG
     new Producto("Hacha", "img", 1500, RAREZA.LEGENDARIA, TIPO_PRODUCTO.ARMA, 40),
     new Producto("Armadura de Escamas", "img", 900, RAREZA.COMUN, TIPO_PRODUCTO.ARMADURA, 15),
     new Producto("Casco del Dragón", "img", 1000, RAREZA.RARA, TIPO_PRODUCTO.ARMADURA, 20),
     new Producto("Fruto de Dragón", "img", 50, RAREZA.COMUN, TIPO_PRODUCTO.CONSUMIBLE, 20),
-    new Producto("Poción", "img", 80, RAREZA.RARA, TIPO_PRODUCTO.CONSUMIBLE, 40),
+    new Producto("Poción", "img", 80, RAREZA.LEGENDARIA, TIPO_PRODUCTO.CONSUMIBLE, 40),
    
 ];
 

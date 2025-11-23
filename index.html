@@ -23,7 +23,7 @@
   <!-- Panel del juego -->
    <div id="game-container">
 
-        <!--1. Escena Inicial del jugador -->
+        <!--1. Escena 1) Inicial del jugador -->
         <section id="scene-start" class="game-scene active-scene"> 
             <h3>¡El Reino de Dragones!</h3>
             
@@ -42,7 +42,7 @@
             </div>
         </section>
 
-        <!--2. Escena del Mercado Negro-->
+        <!--2. Escena 2) del Mercado Negro-->
         <section id="scene-market" class="game-scene hidden-scene"> 
             <h3>Mercado Negro</h3>
             
@@ -58,6 +58,25 @@
             </div>
 
             <button id="btn-go-to-stats" class="btn-continue">Continuar</button>
+        </section>
+
+            <!-- 3. Escena 3) del estado actual del jugador después de comprar-->
+        <section id="scene-updated-stats" class="game-scene hidden-scene">
+            <h3> Estado actual de la jugadora</h3>
+            
+            <div id="player-card-updated">
+                <!-- <img src="img/v5.jpg" alt="Avatar del Jugador"> -->
+                <p><span id="player-name-updated">Vikinga</span></p>
+
+                <div class="stats-grid">
+                    <div class="stat-box">Ataque: <span id="stat-attack-updated">0</span></div>
+                    <div class="stat-box">Defensa: <span id="stat-defense-updated">0</span></div>
+                    <div class="stat-box">Vida Total: <span id="stat-life-updated">100</span></div> 
+                    <div class="stat-box">Puntos: <span id="stat-points-updated">0</span></div>
+                </div>
+                
+                <button id="btn-go-to-enemies" class="btn-continue">Continuar</button>
+            </div>
         </section>
 
 

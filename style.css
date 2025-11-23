@@ -12,4 +12,17 @@
 }
 
 
+/* Cambiar escenas */
+.game-scene {
+    min-height: 500px; 
+    padding: 10px;
+    display: none; 
+}
 
+.active-scene {
+    display: block;
+}
+
+.hidden-scene {
+    display: none;
+}

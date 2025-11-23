@@ -31,8 +31,6 @@ function inicializarJuego() {
     });
 }
 
-// Llamar a la función al cargar el script
-inicializarJuego();
 
 // Funcion vista jugador
 function actualizarVistaJugador(sceneId) {
@@ -48,6 +46,7 @@ function actualizarVistaJugador(sceneId) {
         statsContainer.querySelector('[data-stat="points"]').textContent = jugadoraActual.puntos;
     }
     
+    
 }
 
 // Función comenzar el juego, btn continuar
@@ -56,3 +55,17 @@ function handleStartAdventure() {
     cambiarEscena('scene-market');
 }
 document.getElementById("btn-start-adventure").addEventListener("click", handleStartAdventure);
+
+
+// Escuchar eventos
+document.addEventListener('DOMContentLoaded', () => {
+    inicializarJuego(); //Llamar a la función "comienza el juego"
+
+    // Para pasar de escena 2 a escena 3
+    const btnMarketToStats = document.getElementById("btn-go-to-stats");
+    if (btnMarketToStats) {
+        btnMarketToStats.addEventListener("click", () => {
+            cambiarEscena("scene-updated-stats");
+        });
+    }
+});

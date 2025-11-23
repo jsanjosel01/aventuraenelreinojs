@@ -69,9 +69,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-     // Escena 3 a la Escena 4(Enemigos)
+     // Escena 3 a Escena 4 (Enemigos)
     const btnStatsToEnemies = document.getElementById("btn-go-to-enemies");
     btnStatsToEnemies.addEventListener("click", () => {
         cambiarEscena("scene-enemies");
+    });
+
+    // Escena 4 a Escena 5 (diferentes batallas)
+    const btnEnemiesToBattle = document.getElementById("btn-continue-enemies");
+    btnEnemiesToBattle.addEventListener("click", () => {
+        cambiarEscena("scene-battle");
     });
 });

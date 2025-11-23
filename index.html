@@ -91,6 +91,42 @@
 
         </section>
 
+         <!--5. ESCENA 5) Batallas -->
+        <section id="scene-battle" class="game-scene hidden-scene">
+            <h3>Combates</h3>
+            
+            <div id="battle-display" class="battle-area">
+                
+                <div class="combatants-info">
+                    <!-- Jugadora -->
+                    <div class="player-side">
+                        <img src="img/v5.jpg" alt="Jugadora" id="battle-player-avatar" class="combat-avatar">
+                        <p id="battle-player-name">Astrid</p>
+                        <p>Vida: <span id="battle-player-life">100</span></p>
+
+                    </div>
+                    
+                    <span class="vs-text">VS</span>
+                    
+                    <!-- Enemigos -->
+                    <div class="enemy-side">
+                        <img src="img/d3.jpg" alt="Enemigo" id="battle-enemy-avatar" class="combat-avatar"> 
+                        <p id="battle-enemy-name">Fireworn</p>
+                        <p>Vida: <span id="battle-enemy-life">30</span></p>
+                    </div>
+                </div>
+
+                <div class="combat-log">
+                    <p id="log-message">Ganador + puntos ganados: </p>
+                </div>
+                
+                <button id="btn-continue-battle" class="btn-continue">Continuar batallas</button> 
+            </div>
+
+            <!-- INVENTARIO -->
+            <div id="inventory-display-battle" class="cart-grid"></div>
+        </section>
+
 
 </body>
 </html>

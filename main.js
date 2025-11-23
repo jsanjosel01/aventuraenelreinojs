@@ -80,4 +80,18 @@ document.addEventListener('DOMContentLoaded', () => {
     btnEnemiesToBattle.addEventListener("click", () => {
         cambiarEscena("scene-battle");
     });
+
+    // Escena 5 a Escena 6 (final)
+    const btnBattleToFinal = document.getElementById("btn-continue-battle");
+    if (btnBattleToFinal) {
+        btnBattleToFinal.addEventListener("click", () => {
+            cambiarEscena("scene-final");
+        });
+    }
+
+    // Botón reiniciar el juego
+    const btnRestart = document.getElementById('btn-restart');
+    if (btnRestart) btnRestart.addEventListener('click', inicializarJuego);
+
 });
+

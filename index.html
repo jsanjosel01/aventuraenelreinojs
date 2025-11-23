@@ -100,17 +100,17 @@
                 <div class="combatants-info">
                     <!-- Jugadora -->
                     <div class="player-side">
-                        <img src="img/v5.jpg" alt="Jugadora" id="battle-player-avatar" class="combat-avatar">
+                        <!-- <img src="img/v5.jpg" alt="Jugadora" id="battle-player-avatar" class="combat-avatar"> -->
                         <p id="battle-player-name">Astrid</p>
                         <p>Vida: <span id="battle-player-life">100</span></p>
 
                     </div>
                     
                     <span class="vs-text">VS</span>
-                    
+
                     <!-- Enemigos -->
                     <div class="enemy-side">
-                        <img src="img/d3.jpg" alt="Enemigo" id="battle-enemy-avatar" class="combat-avatar"> 
+                        <!-- <img src="img/d3.jpg" alt="Enemigo" id="battle-enemy-avatar" class="combat-avatar">  -->
                         <p id="battle-enemy-name">Fireworn</p>
                         <p>Vida: <span id="battle-enemy-life">30</span></p>
                     </div>
@@ -125,6 +125,20 @@
 
             <!-- INVENTARIO -->
             <div id="inventory-display-battle" class="cart-grid"></div>
+        </section>
+
+        <!-- ESCENA 6) Final del juego -->
+        <section id="scene-final" class="game-scene hidden-scene">
+            <h3> Resultado Final</h3>
+
+            <div class="final-result-box">
+                <p>El ganador es: </p>
+                <button id="btn-restart" class="btn-continue">Reiniciar Juego</button> 
+            </div>
+
+            <!-- INVENTARIO -->
+            <div id="inventory-display-final" class="cart-grid">
+                </div>
         </section>
 
 

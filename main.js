@@ -21,11 +21,18 @@ function inicializarJuego() {
         new Jefe("Hideous Zippleback", "img/d8.jpg", 20, 100)
     ];
 
-
     // Mostrar la ESCENA 1.
-    actualizarVistaJugador('scene-start');
+    actualizarVistaJugador();
     cambiarEscena('scene-start'); 
+
+    // Botón para pasar a la escena del mercado
+    document.getElementById("btn-start-adventure").addEventListener("click", () => {
+        cambiarEscena("scene-market");
+    });
 }
+
+// Llamar a la función al cargar el script
+inicializarJuego();
 
 // Funcion vista jugador
 function actualizarVistaJugador(sceneId) {
@@ -42,3 +49,10 @@ function actualizarVistaJugador(sceneId) {
     }
     
 }
+
+// Función comenzar el juego, btn continuar
+function handleStartAdventure() {
+    // Cambia a la escena del Mercado
+    cambiarEscena('scene-market');
+}
+document.getElementById("btn-start-adventure").addEventListener("click", handleStartAdventure);

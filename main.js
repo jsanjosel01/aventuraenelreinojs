@@ -57,15 +57,21 @@ function handleStartAdventure() {
 document.getElementById("btn-start-adventure").addEventListener("click", handleStartAdventure);
 
 
-// Escuchar eventos
+// Escuchar eventos, cambio de escenas
 document.addEventListener('DOMContentLoaded', () => {
     inicializarJuego(); //Llamar a la función "comienza el juego"
 
-    // Para pasar de escena 2 a escena 3
+    // Para pasar de escena 2(Mercado) a escena 3(estadoActual)
     const btnMarketToStats = document.getElementById("btn-go-to-stats");
     if (btnMarketToStats) {
         btnMarketToStats.addEventListener("click", () => {
             cambiarEscena("scene-updated-stats");
         });
     }
+
+     // Escena 3 a la Escena 4(Enemigos)
+    const btnStatsToEnemies = document.getElementById("btn-go-to-enemies");
+    btnStatsToEnemies.addEventListener("click", () => {
+        cambiarEscena("scene-enemies");
+    });
 });

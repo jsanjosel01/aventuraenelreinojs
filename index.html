@@ -23,7 +23,7 @@
   <!-- Panel del juego -->
    <div id="game-container">
 
-        <!--1. Escena 1) Inicial del jugador -->
+        <!--1. ESCENA 1) Inicial del jugador -->
         <section id="scene-start" class="game-scene active-scene"> 
             <h3>¡El Reino de Dragones!</h3>
             
@@ -42,7 +42,7 @@
             </div>
         </section>
 
-        <!--2. Escena 2) del Mercado Negro-->
+        <!--2. ESCENA 2) del Mercado Negro-->
         <section id="scene-market" class="game-scene hidden-scene"> 
             <h3>Mercado Negro</h3>
             
@@ -60,7 +60,7 @@
             <button id="btn-go-to-stats" class="btn-continue">Continuar</button>
         </section>
 
-            <!-- 3. Escena 3) del estado actual del jugador después de comprar-->
+        <!-- 3. ESCENA 3) del estado actual del jugador después de comprar-->
         <section id="scene-updated-stats" class="game-scene hidden-scene">
             <h3> Estado actual de la jugadora</h3>
             
@@ -77,6 +77,18 @@
                 
                 <button id="btn-go-to-enemies" class="btn-continue">Continuar</button>
             </div>
+        </section>
+
+        <!-- 4. ESCENA 4) Enemigos-->
+        <section id="scene-enemies" class="game-scene hidden-scene">
+            <h3>Enemigos</h3>
+            
+            <div id="enemy-selection-list" class="enemies-grid">
+
+            </div>
+
+            <button id="btn-continue-enemies" class="btn-continue">Continuar</button>
+
         </section>
 
 

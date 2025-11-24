@@ -1,3 +1,6 @@
+// Clase Jugador
+import { TIPO_PRODUCTO } from "../utils/constants.js";
+
 export default class Jugador {
 
     constructor(nombre, avatar, vidaInicial = 100) {
@@ -5,9 +8,7 @@ export default class Jugador {
         this.avatar = avatar;
         this.puntos = 0;
         this.inventario = [];
-
-        // Vida está a 100
-        this.vida = vidaInicial;
+        this.vida = vidaInicial; // Vida está a 100
         this.vidaMaxima = vidaInicial;
     }
 
@@ -21,24 +22,24 @@ export default class Jugador {
         this.puntos += puntosGanados;
     }
     
-    //Obtener ataque total
+    // Obtener Ataque
     obtenerAtaqueTotal() {
         return this.inventario
-            .filter(item => item.tipo === 'Arma')
+            .filter(item => item.tipo === TIPO_PRODUCTO.ARMA)
             .reduce((total, item) => total + item.bonus, 0);
     }
 
-    //Obtener defensa total
+    // Obtener Defensa
     obtenerDefensaTotal() {
         return this.inventario
-            .filter(item => item.tipo === 'Armadura')
+            .filter(item => item.tipo === TIPO_PRODUCTO.ARMADURA)
             .reduce((total, item) => total + item.bonus, 0);
     }
     
-    //Obtener vida total
+    // Obtener Vida
     obtenerVidaTotal() {
         const bonusConsumibles = this.inventario
-            .filter(item => item.tipo === 'Consumible')
+            .filter(item => item.tipo === TIPO_PRODUCTO.CONSUMIBLE)
             .reduce((total, item) => total + item.bonus, 0);
         return this.vidaMaxima + bonusConsumibles;
     }
@@ -46,5 +47,10 @@ export default class Jugador {
     // Curar vida
     curarVida() {
         this.vida = this.obtenerVidaTotal();
+    }
+
+    // Obtener todos los bonus del inventario a la jugadora
+    aplicarBonusInventario() {
+        this.inventario.forEach(item => item.aplicarBonus(this));
     }
 }

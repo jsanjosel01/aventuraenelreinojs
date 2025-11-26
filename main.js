@@ -39,7 +39,6 @@ function inicializarJuego() {
     
 }
 
-
 // Funcion vista jugador
 function actualizarVistaJugador(sceneId) {
   if (!jugadoraActual) return;
@@ -67,6 +66,8 @@ function actualizarVistaJugador(sceneId) {
     }
 }
 
+// RENDERIZAR
+
 // Función Renderizar productos en el mercado
 function renderizarProductosMercado(productos) {
     const listContainer = document.getElementById('product-list');
@@ -91,6 +92,42 @@ function renderizarProductosMercado(productos) {
         listContainer.appendChild(productElement);
     });
 }
+
+// Funcion renderizar Enemigos
+function renderizarEnemigos() {
+    const listContainer = document.getElementById('enemy-selection-list');
+    if (!listContainer) return;
+
+    listContainer.innerHTML = '';
+
+    if (enemigos.length === 0) {
+        listContainer.innerHTML = '<p>¡No hay enemigos disponibles!</p>';
+        return;
+    }
+
+    enemigos.forEach(enemigo => {
+        const enemyElement = document.createElement('div');
+        enemyElement.classList.add('enemy-item');
+
+        // Tipo: Enemigo o Jefe
+        const tipo = enemigo instanceof Jefe ? 'JEFE' : 'Enemigo';
+
+        enemyElement.innerHTML = `
+            <img src="${enemigo.avatar}" alt="${enemigo.nombre}" style="width:100px; height:100px; object-fit:contain;">
+            <p><strong>${enemigo.nombre}</strong></p>
+            <p><em>${tipo}</em></p>
+            <p>Ataque: ${enemigo.nivelAtaque}</p>
+
+        `;
+            //         <p>Vida: ${enemigo.puntosVida}</p> ESTO IRIA ARRIBA MOSTRAR LA VIDA
+            // <button class="btn-fight-enemy" data-enemy-name="${enemigo.nombre}"  BOTON PARA ELEGIR A LOS ENEMIGOS
+            //     style="cursor:pointer; background:red; color:white; padding:5px;">Luchar</button>
+
+        listContainer.appendChild(enemyElement);
+    });
+ 
+}
+
 
 
 // Clonar objetos del Mercado
@@ -145,6 +182,7 @@ function handleToggleProducto(event) {
 }
 
 
+
 // Eventos y listeners 
 document.addEventListener('DOMContentLoaded', () => {
     inicializarJuego();
@@ -175,10 +213,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Escena 3 a la Escena 4 (enemigos)
+    // btn Enemigos
     const btnStatsToEnemies = document.getElementById("btn-go-to-enemies");
     if (btnStatsToEnemies) {
         btnStatsToEnemies.addEventListener("click", () => {
             cambiarEscena("scene-enemies");
+            renderizarEnemigos();             // Renderizar los enemigos con sus estadísticas
         });
     }
 

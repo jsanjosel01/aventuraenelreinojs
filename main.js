@@ -6,10 +6,13 @@ import Producto from './clases/Producto.js';
 import * as mercado from './model/mercado.js';
 
 import { cambiarEscena } from './utils/utils.js';
+import { combate } from './model/batalla.js';
 
 let jugadoraActual = null;
 let enemigos = [];
 let productosdelMercado = []
+
+let indiceBatalla = 0; //indice del combate
 
 // Funcion Iniciar el juego, creacion de jugador + escena 1
 function inicializarJuego() {
@@ -31,13 +34,8 @@ function inicializarJuego() {
      // Cargar lista de productos del mercado
     productosdelMercado = mercado.getListaProductosOriginal(); 
     
-    // Botón para pasar a la escena del mercado
-    // document.getElementById("btn-start-adventure").addEventListener("click", () => {
-    //     cambiarEscena("scene-market");
-    // });
-
-    
 }
+
 
 // Funcion vista jugador
 function actualizarVistaJugador(sceneId) {
@@ -110,30 +108,46 @@ function renderizarEnemigos() {
         enemyElement.classList.add('enemy-item');
 
         // Tipo: Enemigo o Jefe
-        const tipo = enemigo instanceof Jefe ? 'JEFE' : 'Enemigo';
+        const tipo = enemigo instanceof Jefe ? 'Jefe' : 'Enemigo';
 
+        //Pinta al enemigo
         enemyElement.innerHTML = `
             <img src="${enemigo.avatar}" alt="${enemigo.nombre}" style="width:100px; height:100px; object-fit:contain;">
             <p><strong>${enemigo.nombre}</strong></p>
-            <p><em>${tipo}</em></p>
-            <p>Ataque: ${enemigo.nivelAtaque}</p>
+            <p>${enemigo.nivelAtaque} puntos de ataque</p>
 
         `;
-            //         <p>Vida: ${enemigo.puntosVida}</p> ESTO IRIA ARRIBA MOSTRAR LA VIDA
+            //  <p><em>${tipo}</em></p> //Tipo de enemigo, si es jefe o enemigo
+            //  <p>Vida: ${enemigo.puntosVida}</p> ESTO IRIA ARRIBA MOSTRAR LA VIDA
             // <button class="btn-fight-enemy" data-enemy-name="${enemigo.nombre}"  BOTON PARA ELEGIR A LOS ENEMIGOS
-            //     style="cursor:pointer; background:red; color:white; padding:5px;">Luchar</button>
+            // style="cursor:pointer; background:red; color:white; padding:5px;">Luchar</button>
 
         listContainer.appendChild(enemyElement);
     });
  
 }
 
+// Función para renderizar el inventario en la escena de batalla
+function renderizarInventarioBatalla() {
+    const inventarioContainer = document.getElementById('inventory-display-battle');
+    if (!inventarioContainer) return;
 
+    inventarioContainer.innerHTML = '<h4>Inventario del Combate:</h4>'; //MODIFICAR DESPUÉS
 
-// Clonar objetos del Mercado
-// function clonarObjeto(obj) {
-//     return JSON.parse(JSON.stringify(obj));
-// }
+    if (jugadoraActual.inventario.length === 0) {
+        inventarioContainer.innerHTML += '<p>No tienes objetos</p>';
+        return;
+    }
+
+    const ul = document.createElement('ul');
+    jugadoraActual.inventario.forEach(producto => {
+        const li = document.createElement('li');
+        li.textContent = `${producto.nombre} (+${producto.bonus} ${producto.tipo})`;
+        ul.appendChild(li);
+    });
+    inventarioContainer.appendChild(ul);
+}
+
 
 // btn Añadir / Retirar Productos del Mercado
 function handleToggleProducto(event) {
@@ -181,6 +195,77 @@ function handleToggleProducto(event) {
     actualizarVistaJugador('scene-updated-stats');
 }
 
+// Funcion iniciar las batallas/combates
+function iniciarEscenaBatalla() {
+    indiceBatalla = 0;
+    mostrarBatalla(); // Llama a la primera batalla
+}
+
+// Función mostrar la batalla actual
+function mostrarBatalla() {
+    if (jugadoraActual.puntosVida <= 0) {
+        renderizarEscenaFinal();
+        cambiarEscena('scene-final');
+        return;
+    }
+
+    // Sí no quedan enemigos
+    if (indiceBatalla >= enemigos.length) {
+        renderizarEscenaFinal();
+        cambiarEscena('scene-final');
+        return;
+    }
+
+    const enemigoActual = enemigos[indiceBatalla];
+    cambiarEscena('scene-battle');
+
+    // Ejecutar combate
+    const resultado = combate(enemigoActual, jugadoraActual);
+
+    // Actualizar UI de la Batalla
+    document.getElementById('battle-player-life').textContent = resultado.vidaRestanteJugador; 
+    document.getElementById('battle-enemy-name').textContent = enemigoActual.nombre;
+    document.getElementById('battle-enemy-life').textContent = resultado.vidaRestanteEnemigo;
+
+    // Llama al inventario
+    renderizarInventarioBatalla();
+
+    // Mostrar resultados de la batalla.
+   let mensajeGanador = '';
+    
+    if (resultado.ganador === jugadoraActual.nombre) {
+        mensajeGanador = `${jugadoraActual.nombre}`;
+    } else {
+        mensajeGanador = `${enemigoActual.nombre}`;
+    }
+
+    document.getElementById('battle-result').innerHTML = `
+        <p><strong>Ganador:</strong> ${mensajeGanador}</p>
+        <p><strong>Puntos ganados:</strong> ${resultado.puntos}</p>
+    `;
+
+    // btn "Continuar"
+    indiceBatalla++; // Se incrementa el indice, para la siguiente combate
+    const btnNextBattle = document.getElementById('btn-next-battle');
+    
+    // Sí la jugadora tiene vida:
+    if (jugadoraActual.puntosVida > 0) {
+        if (indiceBatalla < enemigos.length) {
+            btnNextBattle.textContent = `Continuar las batallas ${indiceBatalla + 1}`;
+            btnNextBattle.style.display = 'block';
+        } else {
+            btnNextBattle.textContent = 'Ver resultados';
+            btnNextBattle.style.display = 'block';
+        }
+    } else {
+        // Sí pierde
+        btnNextBattle.textContent = 'Continuar';
+        btnNextBattle.style.display = 'block';
+    }
+
+    // Actualiza la vista de estadísticas
+    actualizarVistaJugador('scene-updated-stats');
+}
 
 
 // Eventos y listeners 
@@ -213,12 +298,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Escena 3 a la Escena 4 (enemigos)
-    // btn Enemigos
     const btnStatsToEnemies = document.getElementById("btn-go-to-enemies");
     if (btnStatsToEnemies) {
         btnStatsToEnemies.addEventListener("click", () => {
             cambiarEscena("scene-enemies");
-            renderizarEnemigos();             // Renderizar los enemigos con sus estadísticas
+            renderizarEnemigos();
         });
     }
 
@@ -226,15 +310,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnEnemiesToBattle = document.getElementById("btn-continue-enemies");
     if (btnEnemiesToBattle) {
         btnEnemiesToBattle.addEventListener("click", () => {
-            cambiarEscena("scene-battle");
+            iniciarEscenaBatalla(); 
         });
     }
 
-    // Escena 5 a la Escena 6 (final)
-    const btnBattleToFinal = document.getElementById("btn-continue-battle");
-    if (btnBattleToFinal) {
-        btnBattleToFinal.addEventListener("click", () => {
-            cambiarEscena("scene-final");
+    // Escena 5 a la escena 6 
+    const btnNextBattle = document.getElementById('btn-next-battle');
+    if (btnNextBattle) {
+        btnNextBattle.addEventListener('click', () => {
+
+            // Comprueba si el jugador está vivo Y si quedan enemigos por luchar
+            if (jugadoraActual.puntosVida > 0 && indiceBatalla < enemigos.length) {
+                mostrarBatalla(); // Pasa a la siguiente batalla
+            } else {
+                renderizarEscenaFinal(); // Final del juego Escena6
+                cambiarEscena("scene-final");
+            }
         });
     }
 
@@ -242,4 +333,3 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnRestart = document.getElementById('btn-restart');
     if (btnRestart) btnRestart.addEventListener('click', inicializarJuego);
 });
-

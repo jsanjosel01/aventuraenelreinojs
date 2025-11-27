@@ -1,5 +1,5 @@
 // Batallas
-
+import { Jefe } from "../clases/Jefe.js";
 //Funcion combate
 export function combate(enemigo, jugador) {
     

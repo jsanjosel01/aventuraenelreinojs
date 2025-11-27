@@ -103,49 +103,57 @@
         <section id="scene-battle" class="game-scene hidden-scene">
             <h3>Escena 5 - Combates</h3>
             
-            <div id="battle-display" class="battle-area">
-                
-                <div class="combatants-info">
-                    <!-- Jugadora -->
-                    <div class="player-side">
-                        <!-- <img src="img/v5.jpg" alt="Jugadora" id="battle-player-avatar" class="combat-avatar"> -->
-                        <p id="battle-player-name">Astrid</p>
-                        <p>Vida: <span id="battle-player-life"> 100 </span></p> 
-                        <!-- //MIRAR SI SE DECLARA AQUI -->
+           <div id="battle-display" class="battle-area">
+            <div class="combatants-info">
 
-                    </div>
-                    
-                    <span class="vs-text">VS</span>
-
-                    <!-- Enemigos -->
-                    <div class="enemy-side">
-                        <!-- <img src="img/d3.jpg" alt="Enemigo" id="battle-enemy-avatar" class="combat-avatar">  -->
-                        <p id="battle-enemy-name">Fireworn</p>
-                        <p>Vida: <span id="battle-enemy-life">30</span></p>
-                    </div>
+                <div class="player-side">
+                    <img src="./img/v5.jpg" alt="Jugadora" id="battle-player-image" class="combat-avatar">
+                    <p id="battle-player-name">Astrid</p>
+                    <p>Vida: <span id="battle-player-life"></span></p>
                 </div>
+            
+                <span class="vs-text">VS</span>
 
-                <div class="combat-log" id="battle-result"><p>Esperando resultado de la batalla...</p> </div>
-                
-                <button id="btn-next-battle" class="btn-continue">Continuar batallas</button>
+                <div class="enemy-side">
+                    <img src="" alt="Enemigo" id="battle-enemy-image" class="combat-avatar"> 
+                    <p id="battle-enemy-name"></p> 
+                    <p>Vida: <span id="battle-enemy-life"></span></p>
+                </div>
+           </div>
+
+            <div class="combat-log" id="battle-result">
+                <p>Resultado del golpe:</p>
             </div>
 
+            <div id="battle-points-total">
+                <p><strong>Puntos Totales:</strong> <span id="player-total-points">0</span></p>
+            </div>
+
+            <button id="btn-next-battle" class="btn-continue">Continuar</button> 
+        
             <!-- INVENTARIO -->
-            <div id="inventory-display-battle" class="cart-grid"></div>
+            <div id="inventory-display-battle" class="cart-grid">
+                <h4>Inventario de Combate:</h4>
+            </div>
         </section>
 
         <!-- ESCENA 6) Final del juego -->
         <section id="scene-final" class="game-scene hidden-scene">
             <h3>Escena 6 Resultado Final</h3>
 
+            <div id="final-stats">
+                <p>Estadísticas del jugador.</p>
+            </div>
+
+
             <div class="final-result-box">
-                <p>El ganador es: </p>
                 <button id="btn-restart" class="btn-continue">Reiniciar Juego</button> 
             </div>
 
             <!-- INVENTARIO -->
-            <div id="inventory-display-final" class="cart-grid">
-                </div>
+            <div id="final-inventory" class="cart-grid">
+            <h4>Inventario Final:</h4>
+            </div>
         </section>
 
 

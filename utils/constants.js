@@ -11,3 +11,5 @@ export const TIPO_PRODUCTO = {
     ARMADURA: "Armadura",
     CONSUMIBLE: "Consumible"
 };
+
+export const UMBRAL_VETERANO = 300; // Así puedo modificarlo con fácilidad

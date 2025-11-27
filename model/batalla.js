@@ -1,49 +1,63 @@
 // Batallas
 import { Jefe } from "../clases/Jefe.js";
-//Funcion combate
+
+//Funcion combate, calcular daño
 export function combate(enemigo, jugador) {
-    
-    const enemigoActual = { ...enemigo }; //Clonar enemigo, asi no se modifica el original
-
-    let vidaJugador = jugador.obtenerVidaTotal();
-    let vidaEnemigo = enemigoActual.puntosVida;
-
     const ataqueJugador = jugador.obtenerAtaqueTotal();
     const defensaJugador = jugador.obtenerDefensaTotal();
 
-    // Turnos jugadora & enemigo, hasta que la vida llegue a 0
-    while (vidaJugador > 0 && vidaEnemigo > 0) {
+    const danoJugador = ataqueJugador; // Daño que hace el jugador un golpe
+    
+    // Daño que hace el enemigo
+    let danoBaseEnemigo = enemigo.nivelAtaque;
+    
+    if (enemigo instanceof Jefe) {
+        danoBaseEnemigo *= enemigo.multiplicadorDano || 1.5; 
+    }
+    const danoEnemigoFinal = Math.max(0, danoBaseEnemigo - defensaJugador);
+    
+    // Mostrar de Vida
+    const vidaEnemigoDespues = Math.max(0, enemigo.puntosVida - danoJugador);
+    const vidaJugadorDespues = Math.max(0, jugador.puntosVida - danoEnemigoFinal);
+    
+    // Determinar Ganador y Actualizar Objetos Persistentes
+    let ganador = 'Empate';
+    let puntosGanados = 0;
+
+    if (vidaEnemigoDespues === 0) {
+        ganador = jugador.nombre; //Jugadora gana
         
-        vidaEnemigo -= ataqueJugador; // Jugadora ataca enemigo
+        // Puntos ganados
+        puntosGanados = enemigo.puntosVida * (enemigo instanceof Jefe ? 1.5 : 1); 
+        puntosGanados = Math.round(puntosGanados);
+        
+        // Actualizaciones
+        jugador.sumarPuntos(puntosGanados);
+        jugador.puntosVida = vidaJugadorDespues;
+        enemigo.puntosVida = 0; // Perdio Enemigo
+        
+    } else if (danoEnemigoFinal > 0 && vidaJugadorDespues === 0) {
+        ganador = enemigo.nombre; //Jugadora pierde
+        puntosGanados = 0;
+        
+        // actualizaciones
+        jugador.puntosVida = 0;
+        enemigo.puntosVida = vidaEnemigoDespues; 
 
-        if (vidaEnemigo <= 0) break; // Si enemigo muere, gameover. FIN DEL JUEGO
-
-        // Enemigo ataca jugadora
-        const danoEnemigo = enemigoActual.nivelAtaque * (enemigoActual instanceof Jefe ? enemigoActual.multiplicadorDano : 1);
-        vidaJugador = (vidaJugador + defensaJugador) - danoEnemigo;
-    }
-
-    // Calcular resultados
-    if (vidaJugador > 0) {
-        // Jugadora gana
-        let puntos = 100 + enemigo.nivelAtaque;
-        if (enemigo instanceof Jefe) puntos *= enemigo.multiplicadorDano;
-
-        jugador.sumarPuntos(Math.round(puntos));
-
-        return {
-            ganador: jugador.nombre,
-            puntos: Math.round(puntos),
-            vidaRestanteJugador: Math.round(vidaJugador),
-            vidaRestanteEnemigo: Math.max(0, Math.round(vidaEnemigo))
-        };
     } else {
-        // Jugadora pierde
-        return {
-            ganador: enemigo.nombre,
-            puntos: 0,
-            vidaRestanteJugador: 0,
-            vidaRestanteEnemigo: Math.max(0, Math.round(vidaEnemigo))
-        };
+        ganador = 'Continuar'; // Empate, continua el combate
+        puntosGanados = 0;
+
+        // actul. Ambos reciben daño
+        jugador.puntosVida = vidaJugadorDespues;
+        enemigo.puntosVida = vidaEnemigoDespues;
     }
+
+    // Mostrar resultados 
+    return {
+        ganador: ganador,
+        puntos: puntosGanados,
+        vidaRestanteJugador: Math.round(jugador.puntosVida), 
+        vidaRestanteEnemigo: Math.round(enemigo.puntosVida)
+    };
 }

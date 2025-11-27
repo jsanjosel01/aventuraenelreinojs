@@ -7,6 +7,7 @@ import * as mercado from './model/mercado.js';
 
 import { cambiarEscena } from './utils/utils.js';
 import { combate } from './model/batalla.js';
+import { distinguirJugador } from './model/ranking.js';
 
 let jugadoraActual = null;
 let enemigos = [];
@@ -195,22 +196,19 @@ function handleToggleProducto(event) {
     actualizarVistaJugador('scene-updated-stats');
 }
 
+// BATALLAS
+
 // Funcion iniciar las batallas/combates
 function iniciarEscenaBatalla() {
     indiceBatalla = 0;
     mostrarBatalla(); // Llama a la primera batalla
 }
 
+
 // Función mostrar la batalla actual
 function mostrarBatalla() {
-    if (jugadoraActual.puntosVida <= 0) {
-        renderizarEscenaFinal();
-        cambiarEscena('scene-final');
-        return;
-    }
-
-    // Sí no quedan enemigos
-    if (indiceBatalla >= enemigos.length) {
+ // 1. Comprobaciones de Fin de Juego (Jugadora muere o enemigos terminan)
+    if (jugadoraActual.puntosVida <= 0 || indiceBatalla >= enemigos.length) {
         renderizarEscenaFinal();
         cambiarEscena('scene-final');
         return;
@@ -219,52 +217,130 @@ function mostrarBatalla() {
     const enemigoActual = enemigos[indiceBatalla];
     cambiarEscena('scene-battle');
 
-    // Ejecutar combate
-    const resultado = combate(enemigoActual, jugadoraActual);
-
-    // Actualizar UI de la Batalla
-    document.getElementById('battle-player-life').textContent = resultado.vidaRestanteJugador; 
+    // renderizacion de nombre e img
+    document.getElementById('battle-player-image').src = jugadoraActual.avatar;
+    document.getElementById('battle-enemy-image').src = enemigoActual.avatar;
     document.getElementById('battle-enemy-name').textContent = enemigoActual.nombre;
-    document.getElementById('battle-enemy-life').textContent = resultado.vidaRestanteEnemigo;
 
-    // Llama al inventario
+    // Ejecuta el combate (Un turno/golpe)
+    const resultado = combate(enemigoActual, jugadoraActual);
+    const vidaEnemigoActual = resultado.vidaRestanteEnemigo; 
+
+    // Actualizar UI de la Batalla (Vidas y Inventario)
+    document.getElementById('battle-player-life').textContent = resultado.vidaRestanteJugador; 
+    document.getElementById('battle-enemy-life').textContent = vidaEnemigoActual;
     renderizarInventarioBatalla();
 
-    // Mostrar resultados de la batalla.
-   let mensajeGanador = '';
+    // Mostrar resultados
+    let ganadorTexto = '';
     
     if (resultado.ganador === jugadoraActual.nombre) {
-        mensajeGanador = `${jugadoraActual.nombre}`;
+        ganadorTexto = `${jugadoraActual.nombre}`;
+    } else if (resultado.ganador === enemigoActual.nombre) {
+        ganadorTexto = `${enemigoActual.nombre}`;
     } else {
-        mensajeGanador = `${enemigoActual.nombre}`;
+        // En caso de empate/continuar, se muestra el jugador que golpeó más fuerte o "Nadie".
+        ganadorTexto = 'empate'; 
     }
 
     document.getElementById('battle-result').innerHTML = `
-        <p><strong>Ganador:</strong> ${mensajeGanador}</p>
+        <p><strong>Ganador:</strong> ${ganadorTexto}</p>
         <p><strong>Puntos ganados:</strong> ${resultado.puntos}</p>
     `;
 
-    // btn "Continuar"
-    indiceBatalla++; // Se incrementa el indice, para la siguiente combate
+    // Mostrar los Puntos totales
+    document.getElementById('player-total-points').textContent = jugadoraActual.puntos;
+
+    // Controlar el índice y el botón
     const btnNextBattle = document.getElementById('btn-next-battle');
     
-    // Sí la jugadora tiene vida:
-    if (jugadoraActual.puntosVida > 0) {
-        if (indiceBatalla < enemigos.length) {
-            btnNextBattle.textContent = `Continuar las batallas ${indiceBatalla + 1}`;
-            btnNextBattle.style.display = 'block';
-        } else {
-            btnNextBattle.textContent = 'Ver resultados';
-            btnNextBattle.style.display = 'block';
-        }
+    // Si el enemigo es derrotado, avanza el índice.
+    if (vidaEnemigoActual === 0) {
+        indiceBatalla++; 
+    } 
+    
+    // Botones de las batallas
+    if (jugadoraActual.puntosVida <= 0 || indiceBatalla >= enemigos.length) {
+        btnNextBattle.textContent = 'Continuar'; // Lleva a Escena 6
+    } else if (vidaEnemigoActual === 0) {
+        // Si el enemigo fue derrotado pero quedan más
+        btnNextBattle.textContent = `Continuar las batallas (${indiceBatalla + 1}/${enemigos.length})`;
     } else {
-        // Sí pierde
-        btnNextBattle.textContent = 'Continuar';
-        btnNextBattle.style.display = 'block';
+        // Si el combate debe seguir contra el mismo enemigo
+        btnNextBattle.textContent = 'Atacar de Nuevo'; 
+    }
+    btnNextBattle.style.display = 'block';
+
+    // Actualiza las estadísticas
+    actualizarVistaJugador('scene-updated-stats');
+}
+
+
+
+// Función renderizar batallas, escena 6 final 
+function renderizarEscenaFinal() {
+   const finalMessageElement = document.getElementById('final-message');
+    const finalStatsElement = document.getElementById('final-stats');
+    const finalInventoryElement = document.getElementById('final-inventory'); 
+    
+    // Verificación
+    if (!finalMessageElement || !finalStatsElement || !finalInventoryElement) return;
+
+    const totalPuntos = jugadoraActual.puntos;
+    const estaViva = jugadoraActual.puntosVida > 0;
+    
+    // Rango y mensaje de derrota
+    const rangoJugador = distinguirJugador(totalPuntos); 
+    const enemigosDerrotados = (indiceBatalla > 0 && jugadoraActual.puntosVida <= 0) ? indiceBatalla - 1 : indiceBatalla;
+    let nombreCausanteDerrota = '';
+    if (!estaViva && indiceBatalla > 0) {
+        const indiceCausante = Math.max(0, indiceBatalla - 1);
+        nombreCausanteDerrota = enemigos[indiceCausante] ? enemigos[indiceCausante].nombre : '';
     }
 
-    // Actualiza la vista de estadísticas
-    actualizarVistaJugador('scene-updated-stats');
+
+    // 2. Determinar el Mensaje Principal
+    if (estaViva && indiceBatalla >= enemigos.length) {
+        finalMessageElement.innerHTML = `
+            <h2>¡Ganaste!</h2>
+            <p>Has derrotado a ${enemigos.length} dragones.</p>
+        `;
+    } else {
+        finalMessageElement.innerHTML = `
+            <h2>Perdiste, fin de la batalla</h2>
+            <p>Has sido derrotada por ${nombreCausanteDerrota}.</p>
+        `;
+    }
+
+    // 3. Mostrar las Estadísticas y Rango
+    finalStatsElement.innerHTML = `
+        <h3>Estadísticas Finales</h3>
+        <p><strong>Rango Obtenido:</strong> ${rangoJugador}</p>
+        <p><strong>Puntos ganados:</strong> ${totalPuntos}</p>
+        <p><strong>Batallas completadas:</strong> ${enemigosDerrotados} de ${enemigos.length}</p>
+        <p><strong>Vida restante:</strong> ${Math.max(0, jugadoraActual.puntosVida)}</p>
+    `;
+    
+    // Renderizar Inventario Final
+    finalInventoryElement.innerHTML = '<h4>Inventario:</h4>';
+
+    if (jugadoraActual.inventario.length === 0) {
+        finalInventoryElement.innerHTML += '<p>No hay objetos en el mercado.</p>';
+    } else {
+        const ul = document.createElement('ul');
+        jugadoraActual.inventario.forEach(producto => {
+            const li = document.createElement('li');
+            li.textContent = `${producto.nombre} (+${producto.bonus} ${producto.tipo})`;
+            ul.appendChild(li);
+        });
+        finalInventoryElement.appendChild(ul);
+    }
+    
+    // Mostrar btn reiniciar juego
+    const btnRestart = document.getElementById('btn-restart');
+    if (btnRestart) {
+        btnRestart.style.display = 'block'; 
+    }
 }
 
 
@@ -319,12 +395,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnNextBattle) {
         btnNextBattle.addEventListener('click', () => {
 
-            // Comprueba si el jugador está vivo Y si quedan enemigos por luchar
-            if (jugadoraActual.puntosVida > 0 && indiceBatalla < enemigos.length) {
-                mostrarBatalla(); // Pasa a la siguiente batalla
+            // Ir a la escena 6
+            if (jugadoraActual.puntosVida <= 0 || indiceBatalla >= enemigos.length) {
+                renderizarEscenaFinal(); // Renderiza los resultados
+                cambiarEscena("scene-final"); // Cambia de escena
+                
             } else {
-                renderizarEscenaFinal(); // Final del juego Escena6
-                cambiarEscena("scene-final");
+                mostrarBatalla(); 
             }
         });
     }

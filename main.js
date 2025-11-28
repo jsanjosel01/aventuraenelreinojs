@@ -308,12 +308,12 @@ function renderizarEscenaFinal() {
         `;
     } else {
         finalMessageElement.innerHTML = `
-            <h2>Perdiste, fin de la batalla</h2>
+            <p>Perdiste, fin de la batalla</p>
             <p>Has sido derrotada por ${nombreCausanteDerrota}.</p>
         `;
     }
 
-    // Mostrar las Estadísticas y Rango (CONSOLIDADO)
+    // Mostrar las Estadísticas y Rango
     // Construye el mensaje específico de Rango (Veterano/Novato)
     const mensajeRangoCompleto = (rangoJugador === "Veterano")
         ? `¡Felicidades! La jugadora ha conseguido ser una <strong>Veterana</strong>.`
@@ -321,19 +321,12 @@ function renderizarEscenaFinal() {
 
     finalStatsElement.innerHTML = `
         <h3>Estadísticas Finales</h3>
-        
-        <p>
-            ${mensajeRangoCompleto}
-            <br>
-            Ha conseguido un total de <strong>${totalPuntos}</strong> puntos en la batalla.
-        </p>
-        
+        <p>${mensajeRangoCompleto}<br>Ha conseguido un total de <strong>${totalPuntos}</strong> puntos en la batalla.</p>
         <p><strong>Batallas completadas:</strong> ${enemigosDerrotados} de ${enemigos.length}</p>
         <p><strong>Vida restante:</strong> ${Math.max(0, jugadoraActual.puntosVida)}</p>
     `;
     
-    // Renderizar Inventario Final (SOLO si hay objetos comprados)
-    
+    // Renderizar Inventario Final, sí hay objetos comprados
     if (jugadoraActual.inventario.length === 0) {
         // Si no hay compras, vaciamos el contenedor para que no se muestre nada
         finalInventoryElement.innerHTML = '';
@@ -357,6 +350,7 @@ function renderizarEscenaFinal() {
         btnRestart.style.display = 'block'; 
     }
 }
+
 
 // Eventos y listeners 
 document.addEventListener('DOMContentLoaded', () => {

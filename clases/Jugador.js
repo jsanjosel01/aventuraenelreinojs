@@ -10,6 +10,8 @@ export default class Jugador {
         this.inventario = [];
         this.vida = vidaInicial; // Vida está a 100
         this.vidaMaxima = vidaInicial;
+        
+        this.puntosVida = vidaInicial;
     }
 
     //Añadir un objeto al inventario

@@ -207,7 +207,7 @@ function iniciarEscenaBatalla() {
 
 // Función mostrar la batalla actual
 function mostrarBatalla() {
- // 1. Comprobaciones de Fin de Juego (Jugadora muere o enemigos terminan)
+ // Jugadora muere o enemigos terminan
     if (jugadoraActual.puntosVida <= 0 || indiceBatalla >= enemigos.length) {
         renderizarEscenaFinal();
         cambiarEscena('scene-final');
@@ -224,10 +224,12 @@ function mostrarBatalla() {
 
     // Ejecuta el combate (Un turno/golpe)
     const resultado = combate(enemigoActual, jugadoraActual);
-    const vidaEnemigoActual = resultado.vidaRestanteEnemigo; 
+    const vidaEnemigoActual = Math.max(0, resultado.vidaRestanteEnemigo);
+    
+    jugadoraActual.puntosVida = Math.max(0, resultado.vidaRestanteJugador);
 
     // Actualizar UI de la Batalla (Vidas y Inventario)
-    document.getElementById('battle-player-life').textContent = resultado.vidaRestanteJugador; 
+    document.getElementById('battle-player-life').textContent = jugadoraActual.puntosVida;
     document.getElementById('battle-enemy-life').textContent = vidaEnemigoActual;
     renderizarInventarioBatalla();
 
@@ -276,33 +278,32 @@ function mostrarBatalla() {
 }
 
 
-
 // Función renderizar batallas, escena 6 final 
 function renderizarEscenaFinal() {
    const finalMessageElement = document.getElementById('final-message');
     const finalStatsElement = document.getElementById('final-stats');
     const finalInventoryElement = document.getElementById('final-inventory'); 
     
-    // Verificación
+    // Verificación de existencia de elementos HTML
     if (!finalMessageElement || !finalStatsElement || !finalInventoryElement) return;
 
     const totalPuntos = jugadoraActual.puntos;
     const estaViva = jugadoraActual.puntosVida > 0;
     
-    // Rango y mensaje de derrota
+    // Calcula el rango (necesario para el mensaje)
     const rangoJugador = distinguirJugador(totalPuntos); 
     const enemigosDerrotados = (indiceBatalla > 0 && jugadoraActual.puntosVida <= 0) ? indiceBatalla - 1 : indiceBatalla;
     let nombreCausanteDerrota = '';
+    
     if (!estaViva && indiceBatalla > 0) {
         const indiceCausante = Math.max(0, indiceBatalla - 1);
         nombreCausanteDerrota = enemigos[indiceCausante] ? enemigos[indiceCausante].nombre : '';
     }
 
-
-    // 2. Determinar el Mensaje Principal
+    // Determinar el Mensaje Principal (Victoria/Derrota)
     if (estaViva && indiceBatalla >= enemigos.length) {
         finalMessageElement.innerHTML = `
-            <h2>¡Ganaste!</h2>
+            <h2>Resultado final</h2>
             <p>Has derrotado a ${enemigos.length} dragones.</p>
         `;
     } else {
@@ -312,21 +313,35 @@ function renderizarEscenaFinal() {
         `;
     }
 
-    // 3. Mostrar las Estadísticas y Rango
+    // Mostrar las Estadísticas y Rango (CONSOLIDADO)
+    // Construye el mensaje específico de Rango (Veterano/Novato)
+    const mensajeRangoCompleto = (rangoJugador === "Veterano")
+        ? `¡Felicidades! La jugadora ha conseguido ser una <strong>Veterana</strong>.`
+        : `La jugadora es una <strong>Novata</strong>. ¡Sigue practicando!`;
+
     finalStatsElement.innerHTML = `
         <h3>Estadísticas Finales</h3>
-        <p><strong>Rango Obtenido:</strong> ${rangoJugador}</p>
-        <p><strong>Puntos ganados:</strong> ${totalPuntos}</p>
+        
+        <p>
+            ${mensajeRangoCompleto}
+            <br>
+            Ha conseguido un total de <strong>${totalPuntos}</strong> puntos en la batalla.
+        </p>
+        
         <p><strong>Batallas completadas:</strong> ${enemigosDerrotados} de ${enemigos.length}</p>
         <p><strong>Vida restante:</strong> ${Math.max(0, jugadoraActual.puntosVida)}</p>
     `;
     
-    // Renderizar Inventario Final
-    finalInventoryElement.innerHTML = '<h4>Inventario:</h4>';
-
+    // Renderizar Inventario Final (SOLO si hay objetos comprados)
+    
     if (jugadoraActual.inventario.length === 0) {
-        finalInventoryElement.innerHTML += '<p>No hay objetos en el mercado.</p>';
+        // Si no hay compras, vaciamos el contenedor para que no se muestre nada
+        finalInventoryElement.innerHTML = '';
+        
     } else {
+        // Si hay compras, mostramos el título y el listado de ítems comprados
+        finalInventoryElement.innerHTML = '<h4>Inventario de Compra:</h4>';
+
         const ul = document.createElement('ul');
         jugadoraActual.inventario.forEach(producto => {
             const li = document.createElement('li');
@@ -336,13 +351,12 @@ function renderizarEscenaFinal() {
         finalInventoryElement.appendChild(ul);
     }
     
-    // Mostrar btn reiniciar juego
+    // Mostrar botón reiniciar juego
     const btnRestart = document.getElementById('btn-restart');
     if (btnRestart) {
         btnRestart.style.display = 'block'; 
     }
 }
-
 
 // Eventos y listeners 
 document.addEventListener('DOMContentLoaded', () => {

@@ -18,7 +18,7 @@ let indiceBatalla = 0; //indice del combate
 // Funcion Iniciar el juego, creacion de jugador + escena 1
 function inicializarJuego() {
     // 1. Crear jugadora
-    jugadoraActual = new Jugador("Vikinga", "img/v5.jpg");
+    jugadoraActual = new Jugador("Vikinga", "img/astrid1.png");
 
     // 2. Crear enemigos
     enemigos = [
@@ -37,33 +37,65 @@ function inicializarJuego() {
     
 }
 
-
 // Funcion vista jugador
 function actualizarVistaJugador(sceneId) {
-  if (!jugadoraActual) return;
+    if (!jugadoraActual) return;
 
     const ataque = jugadoraActual.obtenerAtaqueTotal();
     const defensa = jugadoraActual.obtenerDefensaTotal();
     const vida = jugadoraActual.obtenerVidaTotal();
     const puntos = jugadoraActual.puntos;
 
-    // Actualizar stats 
-    if (sceneId === 'scene-updated-stats') {
-        document.getElementById('stat-attack-updated').textContent = ataque;
-        document.getElementById('stat-defense-updated').textContent = defensa;
-        document.getElementById('stat-life-updated').textContent = vida;
-        document.getElementById('stat-points-updated').textContent = puntos;
+    // La vista se actualiza si estamos en la escena de stats O en el mercado.
+    if (sceneId === 'scene-updated-stats' || sceneId === 'scene-market') { 
+        // 1. Actualizar Stats (si los elementos HTML existen)
+        if (document.getElementById('stat-attack-updated')) {
+             document.getElementById('stat-attack-updated').textContent = ataque;
+             document.getElementById('stat-defense-updated').textContent = defensa;
+             document.getElementById('stat-life-updated').textContent = vida;
+             document.getElementById('stat-points-updated').textContent = puntos;
+        }
 
-        // Actualizar inventario
-        const inventoryList = document.getElementById('inventory-list-updated');
-        inventoryList.innerHTML = '';
+        // 2. Actualizar Inventario (Lista Escrita + Imagen)
+    const inventoryContainer = document.getElementById('inventory-list-updated');
+
+    if (inventoryContainer) { 
+        inventoryContainer.innerHTML = '';
+        let gridContainer = inventoryContainer;
+        
+        if (!inventoryContainer.classList.contains('inventory-grid')) {
+            gridContainer = document.createElement('div');
+            gridContainer.classList.add('inventory-grid');
+        }
+
         jugadoraActual.inventario.forEach(producto => {
-            const li = document.createElement('li');
-            li.textContent = `${producto.nombre} (+${producto.bonus} ${producto.tipo})`;
-            inventoryList.appendChild(li);
+            
+            // Crear el DIV individual
+            const itemSlot = document.createElement('div');
+            // Usamos la clase que define la forma cuadrada y el borde
+            itemSlot.classList.add('inventory-item'); 
+
+            // Crear la img
+            const img = document.createElement('img');
+            img.src = producto.imagen;
+            img.alt = producto.nombre;
+            img.classList.add('inventory-item-image'); 
+            
+            // Adjuntar solo la imagen al slot
+            itemSlot.appendChild(img);
+            
+            // Adjuntar el slot al contenedor de la rejilla
+            gridContainer.appendChild(itemSlot);
         });
+
+        // adjuntarlo al padre
+        if (gridContainer !== inventoryContainer) {
+            inventoryContainer.appendChild(gridContainer);
+        }
+    }
     }
 }
+
 
 // RENDERIZAR
 
@@ -80,12 +112,13 @@ function renderizarProductosMercado(productos) {
 
         const precioFormateado = producto.formatearAtributos();
 
+        
         productElement.innerHTML = `
-            <img src="${producto.imagen}" alt="${producto.nombre}" style="width:80px; height:80px; object-fit:contain;">
+            <img src="${producto.imagen}" alt="${producto.nombre}" class="product-image">
             <p><strong>${producto.nombre}</strong></p>
             <p style="font-size:0.8em;">+${producto.bonus} ${producto.tipo}</p>
             <p>${precioFormateado}</p>
-            <button class="btn-add" style="cursor:pointer; background:gold; border:1px solid orange; padding:5px;">Añadir</button>
+            <button class="btn-add btn-toggle">Añadir</button>
         `;
 
         listContainer.appendChild(productElement);
@@ -113,19 +146,13 @@ function renderizarEnemigos() {
 
         //Pinta al enemigo
         enemyElement.innerHTML = `
-            <img src="${enemigo.avatar}" alt="${enemigo.nombre}" style="width:100px; height:100px; object-fit:contain;">
+            <img src="${enemigo.avatar}" alt="${enemigo.nombre}" class="enemy-image">
             <p><strong>${enemigo.nombre}</strong></p>
             <p>${enemigo.nivelAtaque} puntos de ataque</p>
 
         `;
-            //  <p><em>${tipo}</em></p> //Tipo de enemigo, si es jefe o enemigo
-            //  <p>Vida: ${enemigo.puntosVida}</p> ESTO IRIA ARRIBA MOSTRAR LA VIDA
-            // <button class="btn-fight-enemy" data-enemy-name="${enemigo.nombre}"  BOTON PARA ELEGIR A LOS ENEMIGOS
-            // style="cursor:pointer; background:red; color:white; padding:5px;">Luchar</button>
-
         listContainer.appendChild(enemyElement);
     });
- 
 }
 
 // Función para renderizar el inventario en la escena de batalla
@@ -133,20 +160,40 @@ function renderizarInventarioBatalla() {
     const inventarioContainer = document.getElementById('inventory-display-battle');
     if (!inventarioContainer) return;
 
-    inventarioContainer.innerHTML = '<h4>Inventario del Combate:</h4>'; //MODIFICAR DESPUÉS
+    inventarioContainer.innerHTML = '<h4>Inventario:</h4>'; 
 
     if (jugadoraActual.inventario.length === 0) {
         inventarioContainer.innerHTML += '<p>No tienes objetos</p>';
         return;
     }
 
-    const ul = document.createElement('ul');
+    // Creamos el contenedor DIV que actuará como la fila flexible
+    const slotsContainer = document.createElement('div');
+    slotsContainer.classList.add('cart-grid'); 
+
     jugadoraActual.inventario.forEach(producto => {
-        const li = document.createElement('li');
-        li.textContent = `${producto.nombre} (+${producto.bonus} ${producto.tipo})`;
-        ul.appendChild(li);
+        // Creamos la casilla visual 
+        const slot = document.createElement('div');
+        slot.classList.add('inventory-slot');
+        
+        // Creación de la imagen
+        const img = document.createElement('img');
+        img.src = producto.imagen;
+        img.alt = producto.nombre;
+        
+        // Estilos para que la imagen
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'contain';
+
+        // Añade solo la imagen (sin texto)
+        slot.appendChild(img);
+        
+        slotsContainer.appendChild(slot);
     });
-    inventarioContainer.appendChild(ul);
+    
+    //Reemplazamos la lista UL por el contenedor de casillas DIV
+    inventarioContainer.appendChild(slotsContainer);
 }
 
 
@@ -167,7 +214,8 @@ function handleToggleProducto(event) {
         // Cambiar botón a Retirar
         btn.textContent = "Retirar";
         btn.classList.replace("btn-add", "btn-remove");
-        btn.style.background = "#fff";
+        btn.classList.remove('btn-toggle'); 
+        // btn.style.background = "#fff"; 
 
         // Clonar producto usando el constructor para preservar métodos
         const productoClonado = new Producto(
@@ -186,14 +234,15 @@ function handleToggleProducto(event) {
         // Cambiar botón a Añadir
         btn.textContent = "Añadir";
         btn.classList.replace("btn-remove", "btn-add");
-        btn.style.background = "gold"; //Amarrillo
+        btn.classList.add('btn-toggle'); 
+        // btn.style.background = "gold"; 
 
         // Quitar del inventario por nombre
         jugadoraActual.inventario = jugadoraActual.inventario.filter(p => p.nombre !== nombreProducto);
     }
 
-    // Actualizar estadísticas y mostrar inventario en escena 3
-    actualizarVistaJugador('scene-updated-stats');
+    // Actualizar inventario
+    actualizarVistaJugador('scene-market');
 }
 
 // BATALLAS
@@ -242,7 +291,7 @@ function mostrarBatalla() {
         ganadorTexto = `${enemigoActual.nombre}`;
     } else {
         // En caso de empate/continuar, se muestra el jugador que golpeó más fuerte o "Nadie".
-        ganadorTexto = 'empate'; 
+        ganadorTexto = 'Continuar batallas'; 
     }
 
     document.getElementById('battle-result').innerHTML = `
@@ -283,73 +332,79 @@ function renderizarEscenaFinal() {
    const finalMessageElement = document.getElementById('final-message');
     const finalStatsElement = document.getElementById('final-stats');
     const finalInventoryElement = document.getElementById('final-inventory'); 
-    
+
     // Verificación de existencia de elementos HTML
-    if (!finalMessageElement || !finalStatsElement || !finalInventoryElement) return;
+     if (!finalMessageElement || !finalStatsElement || !finalInventoryElement) return;
 
     const totalPuntos = jugadoraActual.puntos;
     const estaViva = jugadoraActual.puntosVida > 0;
-    
+
     // Calcula el rango (necesario para el mensaje)
     const rangoJugador = distinguirJugador(totalPuntos); 
     const enemigosDerrotados = (indiceBatalla > 0 && jugadoraActual.puntosVida <= 0) ? indiceBatalla - 1 : indiceBatalla;
     let nombreCausanteDerrota = '';
-    
+
     if (!estaViva && indiceBatalla > 0) {
-        const indiceCausante = Math.max(0, indiceBatalla - 1);
-        nombreCausanteDerrota = enemigos[indiceCausante] ? enemigos[indiceCausante].nombre : '';
+    const indiceCausante = Math.max(0, indiceBatalla - 1);
+    nombreCausanteDerrota = enemigos[indiceCausante] ? enemigos[indiceCausante].nombre : '';
     }
 
     // Determinar el Mensaje Principal (Victoria/Derrota)
     if (estaViva && indiceBatalla >= enemigos.length) {
         finalMessageElement.innerHTML = `
-            <h2>Resultado final</h2>
-            <p>Has derrotado a ${enemigos.length} dragones.</p>
-        `;
-    } else {
+        <p>Has derrotado a ${enemigos.length} dragones.</p>`;
+        } else {
         finalMessageElement.innerHTML = `
-            <p>Perdiste, fin de la batalla</p>
-            <p>Has sido derrotada por ${nombreCausanteDerrota}.</p>
-        `;
+        <p>Perdiste, fin de la batalla</p>
+        <p>Has sido derrotada por ${nombreCausanteDerrota}.</p>`;
     }
 
     // Mostrar las Estadísticas y Rango
     // Construye el mensaje específico de Rango (Veterano/Novato)
     const mensajeRangoCompleto = (rangoJugador === "Veterano")
-        ? `¡Felicidades! La jugadora ha conseguido ser una <strong>Veterana</strong>.`
-        : `La jugadora es una <strong>Novata</strong>. ¡Sigue practicando!`;
+    ? `¡Felicidades! La jugadora ha conseguido ser una <strong>Veterana</strong>.`
+    : `La jugadora es una <strong>Novata</strong>. ¡Sigue practicando!`;
 
     finalStatsElement.innerHTML = `
-        <h3>Estadísticas Finales</h3>
-        <p>${mensajeRangoCompleto}<br>Ha conseguido un total de <strong>${totalPuntos}</strong> puntos en la batalla.</p>
-        <p><strong>Batallas completadas:</strong> ${enemigosDerrotados} de ${enemigos.length}</p>
-        <p><strong>Vida restante:</strong> ${Math.max(0, jugadoraActual.puntosVida)}</p>
-    `;
-    
+    <h4>Estadísticas Finales</h4>
+    <p>${mensajeRangoCompleto}<br>Ha conseguido un total de <strong>${totalPuntos}</strong> puntos en la batalla.</p>
+    <p><strong>Batallas completadas:</strong> ${enemigosDerrotados} de ${enemigos.length}</p>
+    <p><strong>Vida restante:</strong> ${Math.max(0, jugadoraActual.puntosVida)}</p> `;
+
+
     // Renderizar Inventario Final, sí hay objetos comprados
     if (jugadoraActual.inventario.length === 0) {
-        // Si no hay compras, vaciamos el contenedor para que no se muestre nada
-        finalInventoryElement.innerHTML = '';
-        
-    } else {
-        // Si hay compras, mostramos el título y el listado de ítems comprados
-        finalInventoryElement.innerHTML = '<h4>Inventario de Compra:</h4>';
+        finalInventoryElement.innerHTML = '<p>No hay objetos comprados>';
+        } else {
+        finalInventoryElement.innerHTML = '<h4>Inventario: </h4>';
 
-        const ul = document.createElement('ul');
+    // Contenedor tipo div en vez de ul
+        const contenedor = document.createElement('div');
+        contenedor.classList.add('inventory-grid'); 
+
         jugadoraActual.inventario.forEach(producto => {
-            const li = document.createElement('li');
-            li.textContent = `${producto.nombre} (+${producto.bonus} ${producto.tipo})`;
-            ul.appendChild(li);
+            
+            const itemDiv = document.createElement('div');
+            
+            itemDiv.classList.add('inventory-item');
+
+            const img = document.createElement('img');
+            img.src = producto.imagen;
+            img.alt = producto.nombre;
+            img.classList.add('inventory-item-image'); 
+            itemDiv.appendChild(img); // imagenes del inventario
+            contenedor.appendChild(itemDiv);
         });
-        finalInventoryElement.appendChild(ul);
-    }
-    
+
+        finalInventoryElement.appendChild(contenedor);
+ }
+
     // Mostrar botón reiniciar juego
     const btnRestart = document.getElementById('btn-restart');
-    if (btnRestart) {
+        if (btnRestart) {
         btnRestart.style.display = 'block'; 
+        }
     }
-}
 
 
 // Eventos y listeners 
@@ -362,6 +417,8 @@ document.addEventListener('DOMContentLoaded', () => {
         btnStart.addEventListener("click", () => {
             cambiarEscena("scene-market");
             renderizarProductosMercado(productosdelMercado);
+            // Actualiza el inventario
+            actualizarVistaJugador('scene-market'); 
         });
     }
 

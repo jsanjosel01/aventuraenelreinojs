@@ -16,6 +16,8 @@
 
     <script type="module" src="/model/mercado.js"></script>
 
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+
     <title>Aventura en el Reino de js</title>
 </head>
 <body>
@@ -23,13 +25,13 @@
   <!-- Panel del juego -->
    <div id="game-container">
 
-        <!--1. ESCENA 1) Inicial del jugador -->
+        <!--1. ESCENA 1 Inicial del jugador -->
         <section id="scene-start" class="game-scene active-scene"> 
-            <h3>¡El Reino de Dragones!</h3>
+            <h3>El Reino de Dragones</h3>
             
             <div id="player-card-initial">
-                <!-- <img src="img/v5.jpg" alt="Avatar de la jugadora" id="player-avatar-img"> -->
-                <p><span id="player-name-start">Vikinga</span></p>
+                <img src="img/astrid1.png" alt="Avatar de la jugadora" id="player-avatar-img">
+                <p><span id="player-name-start"><b>Vikinga</b></span></p>
                 
                 <div class="stats-grid">
                     <div class="stat-box">Ataque: <span id="stat-attack-start">0</span></div>
@@ -42,31 +44,45 @@
             </div>
         </section>
 
-        <!--2. ESCENA 2) del Mercado Negro-->
+        <!--2. ESCENA 2 del Mercado Negro-->
         <section id="scene-market" class="game-scene hidden-scene"> 
             <h3>Escena 2 - Mercado Negro</h3>
             
             <!-- Lista de productos, del mercado -->
             <div id="product-list" class="market-grid"> 
                 
-                <button class="btn-toggle">Añadir/ Retirar</button>
+                <button class="btn-toggle">Añadir</button>
             </div>
             
             <!-- Productos comprados, se añaden a la cesta -->
             <div id="cart-display" class="cart-grid"> 
 
             </div>
+            
+            <!-- Inventario -->
+                <!-- <div id="player-inventory-updated">
+                    <h4>Inventario:</h4>
+                    <ul id="inventory-list-updated">
+                        
+                    </ul>
+                </div> -->
+            <div id="inventario-container">
+                <h4>Inventario:</h4> 
+                
+                <div id="inventory-list-updated" class="cart-grid"></div>
+            </div>
+            
 
-            <button id="btn-go-to-stats" class="btn-continue">Continuar</button>
+            <button id="btn-go-to-stats" class="btn-continue">Continuar</button> 
         </section>
 
-        <!-- 3. ESCENA 3) del estado actual del jugador después de comprar-->
+        <!-- 3. ESCENA 3 del estado actual del jugador después de comprar-->
         <section id="scene-updated-stats" class="game-scene hidden-scene">
             <h3> Escena 3 - Estado actual de la jugadora</h3>
             
-            <div id="player-card-updated">
-                <!-- <img src="img/v5.jpg" alt="Avatar del Jugador"> -->
-                <p><span id="player-name-updated">Vikinga</span></p>
+            <div id="player-card-initial">
+                <img src="img/astrid1.png" alt="Avatar del Jugador" id="player-avatar-img">
+                <p><span id="player-name-updated"><b>Vikinga</b></span></p>
 
                 <div class="stats-grid">
                     <div class="stat-box">Ataque: <span id="stat-attack-updated">0</span></div>
@@ -76,18 +92,16 @@
                 </div>
 
                 <!-- Inventario -->
-                <div id="player-inventory-updated">
-                    <h4>Inventario:</h4>
-                    <ul id="inventory-list-updated">
-                        <!-- Productos comprados -->
-                    </ul>
-                </div>
+              
+            <div id="player-inventory-updated">
+                <h4>Inventario:</h4>
+                <div id="inventory-list-updated" class="cart-grid"></div>
                 
                 <button id="btn-go-to-enemies" class="btn-continue">Continuar</button>
             </div>
         </section>
 
-        <!-- 4. ESCENA 4) Enemigos-->
+        <!-- 4. ESCENA 4 Enemigos-->
         <section id="scene-enemies" class="game-scene hidden-scene">
             <h3>Escena 4 - Enemigos</h3>
             
@@ -99,7 +113,7 @@
 
         </section>
 
-         <!--5. ESCENA 5) Batallas -->
+        <!--5. ESCENA 5 Batallas -->
         <section id="scene-battle" class="game-scene hidden-scene">
             <h3>Escena 5 - Combates</h3>
             
@@ -107,7 +121,7 @@
             <div class="combatants-info">
 
                 <div class="player-side">
-                    <img src="./img/v5.jpg" alt="Jugadora" id="battle-player-image" class="combat-avatar">
+                    <img src="./img/astrid1.png" alt="Jugadora" id="battle-player-image" class="combat-avatar">
                     <p id="battle-player-name">Astrid</p>
                     <p>Vida: <span id="battle-player-life"></span></p>
                 </div>
@@ -133,29 +147,31 @@
         
             <!-- INVENTARIO -->
             <div id="inventory-display-battle" class="cart-grid">
-                <h4>Inventario de Combate:</h4>
+                <h4>Inventario:</h4>
             </div>
         </section>
 
-        <!-- ESCENA 6) Final del juego -->
+        <!-- ESCENA 6 Final del juego -->
         <section id="scene-final" class="game-scene hidden-scene">
             <h3>Escena 6 Resultado Final</h3>
 
             <div id="final-message"></div>
 
             <div id="final-stats">
-                <p>Estadísticas del jugador.</p>
+                <p>Estadísticas de la jugadora</p>
             </div>
 
-            <div class="final-result-box">
+            <!-- <div class="final-result-box"> -->
                 <button id="btn-restart" class="btn-continue">Reiniciar Juego</button> 
-            </div>
+            
 
             <!-- INVENTARIO -->
             <div id="final-inventory" class="cart-grid">
             <h4>Inventario Final:</h4>
             </div>
         </section>
+
+       
 
 </body>
 </html>

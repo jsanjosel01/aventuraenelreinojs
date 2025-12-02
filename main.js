@@ -340,8 +340,11 @@ function renderizarEscenaFinal() {
     // Determinar el Mensaje Principal (Victoria/Derrota)
     if (estaViva && indiceBatalla >= enemigos.length) {
         finalMessageElement.innerHTML = `<p>Has derrotado a ${enemigos.length} dragones.</p>`;
+        lanzarConfettiVictoria(); //LLAMAR A LA FUNCIÓN CONFETTI.
     } else {
         finalMessageElement.innerHTML = `<p>Perdiste, fin de la batalla</p><p>Has sido derrotada por ${nombreCausanteDerrota}.</p>`;
+        lanzarConfetiDerrota(); //Confetti de perdedor
+
     }
 
     // Mostrar las Estadísticas y Rango
@@ -391,6 +394,36 @@ function renderizarEscenaFinal() {
     if (btnRestart) {
         btnRestart.style.display = 'block'; 
     }
+}
+
+// Función para lanzar confetti, cuando gana la jugadora.
+function lanzarConfettiVictoria() {
+    if (typeof confetti === 'function') {
+        
+        // Ejecuta la animación 
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+        
+    } 
+}
+
+// Funcion confetti de perdedor, cae para abajo
+function lanzarConfetiDerrota() {
+    if (typeof confetti === 'function') {
+        
+        confetti({
+            particleCount: 80,
+            spread: 80, 
+            angle: 270, // Cayendo ligeramente hacia abajo
+            startVelocity: 30,
+            origin: { y: 0.5, x: 0.5 }, // Centro de la pantalla
+            colors: ['#000000', '#333333', '#666666']
+        });
+        
+    } 
 }
 
 

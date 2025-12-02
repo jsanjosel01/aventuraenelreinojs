@@ -8,10 +8,10 @@ const LISTA_PRODUCTOS_ORIGINAL = [
 
     new Producto("Flecha", "../img/flecha.png", 1200, RAREZA.RARA, TIPO_PRODUCTO.ARMA, 25),
     new Producto("Hacha", "../img/hacha.png", 1500, RAREZA.LEGENDARIA, TIPO_PRODUCTO.ARMA, 40),
-    new Producto("Escudo", "../img/escudo.png", 900, RAREZA.COMUN, TIPO_PRODUCTO.ARMADURA, 15),
-    new Producto("Casco", "../img/casco.png", 1000, RAREZA.RARA, TIPO_PRODUCTO.ARMADURA, 20),
-    new Producto("Fruto de Dragón", "../img/fruta.png", 50, RAREZA.COMUN, TIPO_PRODUCTO.CONSUMIBLE, 20),
-    new Producto("Poción", "../img/productos/pocionN.png", 80, RAREZA.LEGENDARIA, TIPO_PRODUCTO.CONSUMIBLE, 40),
+    new Producto("Escudo", "../img/escudo.png", 900, RAREZA.COMUN, TIPO_PRODUCTO.ARMA, 25),
+    new Producto("Casco", "../img/casco.png", 1000, RAREZA.RARA, TIPO_PRODUCTO.ARMA, 20),
+    new Producto("Fruto de Dragón", "../img/fruta.png", 50, RAREZA.COMUN, TIPO_PRODUCTO.ARMA, 20),
+    new Producto("Poción", "../img/productos/pocionN.png", 80, RAREZA.LEGENDARIA, TIPO_PRODUCTO.ARMA, 60),
    
 ];
 

@@ -487,6 +487,7 @@ main {
 }
 
 
+
 /* Pie de página */
 #footer {
     color: var(--light); 
@@ -496,7 +497,6 @@ main {
     font-size: 0.9em ;
      
 }
-
 
 
 /* RESPONSIVE */

@@ -486,15 +486,15 @@ main {
     justify-content: center;
 }
 
-/* --- ESTILO DEL PIE DE PÁGINA --- */
+
+/* Pie de página */
 #footer {
     color: var(--light); 
     padding: 15px 0; 
     width: 100%; 
     text-align: center;
     font-size: 0.9em ;
-    
-    
+     
 }
 
 

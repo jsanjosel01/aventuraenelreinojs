@@ -22,16 +22,29 @@ body {
     font-family: "MedievalSharp", cursive;
     /* font-family: "Segoe UI", sans-serif; */
     min-height: 100vh;
+    
     display: flex;
     justify-content: center;
+    flex-direction: column;
 
+}
+
+main {
+    
+    flex-grow: 1; 
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+
+    width: 100%; /* Ocupa todo el ancho */
 }
 
 /* CONTENEDOR PRINCIPAL */
 #game-container {
     width: 95%;
+    height: auto;
     max-width: 800px;
-    height: 600px; /*ancho*/
+    /*ancho*/
     margin-top: 32px;
     margin-bottom: 32px;
     background: var(--primary);
@@ -472,6 +485,18 @@ body {
     display: flex;
     justify-content: center;
 }
+
+/* --- ESTILO DEL PIE DE PÁGINA --- */
+#footer {
+    color: var(--light); 
+    padding: 15px 0; 
+    width: 100%; 
+    text-align: center;
+    font-size: 0.9em ;
+    
+    
+}
+
 
 
 /* RESPONSIVE */

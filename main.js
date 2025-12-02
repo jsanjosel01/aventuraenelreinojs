@@ -41,6 +41,7 @@ function inicializarJuego() {
 function actualizarVistaJugador(sceneId) {
 if (!jugadoraActual) return;
 
+    // Obtención de Estadísticas 
     const ataque = jugadoraActual.obtenerAtaqueTotal();
     const defensa = jugadoraActual.obtenerDefensaTotal();
     const vida = jugadoraActual.obtenerVidaTotal();
@@ -49,7 +50,7 @@ if (!jugadoraActual) return;
     // La vista se actualiza si estamos en la escena de stats O en el mercado.
     if (sceneId === 'scene-updated-stats' || sceneId === 'scene-market') { 
         
-        // 1. Actualizar Stats (si los elementos HTML existen)
+        // Actualizar Stats (si los elementos HTML existen)
         if (document.getElementById('stat-attack-updated')) {
              document.getElementById('stat-attack-updated').textContent = ataque;
              document.getElementById('stat-defense-updated').textContent = defensa;
@@ -57,18 +58,29 @@ if (!jugadoraActual) return;
              document.getElementById('stat-points-updated').textContent = puntos;
         }
 
-        // 2. Actualizar Inventario (Lista visual de casillas)
-        const inventoryContainer = document.getElementById('inventory-list-updated');
+        //Actualizar Inventario
+        let inventoryListId; // Determinar qué ID
+        
+        if (sceneId === 'scene-updated-stats') {
+             // ID específico de la Escena 3 (Estadísticas)
+             inventoryListId = 'inventory-list-stats'; 
+        } else if (sceneId === 'scene-market') {
+             // ID específico de la Escena 2 (Mercado)
+             inventoryListId = 'inventory-list-updated'; 
+        }
+
+        // Buscar el contenedor
+        const inventoryContainer = document.getElementById(inventoryListId);
 
         if (inventoryContainer) { 
-            inventoryContainer.innerHTML = '';
+            inventoryContainer.innerHTML = ''; // Limpiar la lista
             
             // Recorrer el inventario del jugador y crear las casillas
             jugadoraActual.inventario.forEach(producto => {
                 
-                // Crear el DIV individual que será la CASILLA
+                // Crear el DIV individual
                 const itemSlot = document.createElement('div');
-                // Usamos la clase .item para aplicar el CSS de la cuadrícula
+                // Usamos la clase .item para aplicar el CSS de la cuadrícula unificada
                 itemSlot.classList.add('item'); 
                 
                 // Crear la imagen
@@ -79,11 +91,12 @@ if (!jugadoraActual) return;
                 // Adjuntar la imagen a la casilla
                 itemSlot.appendChild(img);
                 
-                // Adjuntar la casilla al contenedor de la lista 
+                // Adjuntar la casilla al contenedor
                 inventoryContainer.appendChild(itemSlot);
             });
         }
     }
+
 }
 
 

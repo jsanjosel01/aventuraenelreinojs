@@ -226,7 +226,6 @@ main {
     
 }
 
-
 #inventory-list-updated.cart-grid {
     padding: 5px;
     border-radius: 3px;
@@ -258,9 +257,32 @@ main {
     pointer-events: none;
 }
 
+/* Inventario Escena 3*/
+#inventario-container-stats {
+     background-color: var(--light);
+    padding: 12px;
+    border-radius: 8px; 
+    box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.5); /* Sombra */
+    
+    width: 80%;
+    margin: 20px auto; /* Centrar en la página */
+}
 
-/* estilo en el inventario escena 5 */
 
+#inventory-list-stats.cart-grid {
+    padding: 5px;
+    border-radius: 3px;
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: flex-start; 
+    gap: 5px; 
+
+    width: 100%; 
+    box-sizing: border-box; 
+    min-height: 80px; 
+}
+
+/* Inventario escena 5 */
 #inventory-display-battle {
     background-color: var(--light);
     padding: 12px;

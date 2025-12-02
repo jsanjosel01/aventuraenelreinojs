@@ -39,7 +39,7 @@ function inicializarJuego() {
 
 // Funcion vista jugador
 function actualizarVistaJugador(sceneId) {
-    if (!jugadoraActual) return;
+if (!jugadoraActual) return;
 
     const ataque = jugadoraActual.obtenerAtaqueTotal();
     const defensa = jugadoraActual.obtenerDefensaTotal();
@@ -48,6 +48,7 @@ function actualizarVistaJugador(sceneId) {
 
     // La vista se actualiza si estamos en la escena de stats O en el mercado.
     if (sceneId === 'scene-updated-stats' || sceneId === 'scene-market') { 
+        
         // 1. Actualizar Stats (si los elementos HTML existen)
         if (document.getElementById('stat-attack-updated')) {
              document.getElementById('stat-attack-updated').textContent = ataque;
@@ -56,43 +57,32 @@ function actualizarVistaJugador(sceneId) {
              document.getElementById('stat-points-updated').textContent = puntos;
         }
 
-        // 2. Actualizar Inventario (Lista Escrita + Imagen)
-    const inventoryContainer = document.getElementById('inventory-list-updated');
+        // 2. Actualizar Inventario (Lista visual de casillas)
+        const inventoryContainer = document.getElementById('inventory-list-updated');
 
-    if (inventoryContainer) { 
-        inventoryContainer.innerHTML = '';
-        let gridContainer = inventoryContainer;
-        
-        if (!inventoryContainer.classList.contains('inventory-grid')) {
-            gridContainer = document.createElement('div');
-            gridContainer.classList.add('inventory-grid');
+        if (inventoryContainer) { 
+            inventoryContainer.innerHTML = '';
+            
+            // Recorrer el inventario del jugador y crear las casillas
+            jugadoraActual.inventario.forEach(producto => {
+                
+                // Crear el DIV individual que será la CASILLA
+                const itemSlot = document.createElement('div');
+                // Usamos la clase .item para aplicar el CSS de la cuadrícula
+                itemSlot.classList.add('item'); 
+                
+                // Crear la imagen
+                const img = document.createElement('img');
+                img.src = producto.imagen; 
+                img.alt = producto.nombre;
+                
+                // Adjuntar la imagen a la casilla
+                itemSlot.appendChild(img);
+                
+                // Adjuntar la casilla al contenedor de la lista 
+                inventoryContainer.appendChild(itemSlot);
+            });
         }
-
-        jugadoraActual.inventario.forEach(producto => {
-            
-            // Crear el DIV individual
-            const itemSlot = document.createElement('div');
-            // Usamos la clase que define la forma cuadrada y el borde
-            itemSlot.classList.add('inventory-item'); 
-
-            // Crear la img
-            const img = document.createElement('img');
-            img.src = producto.imagen;
-            img.alt = producto.nombre;
-            img.classList.add('inventory-item-image'); 
-            
-            // Adjuntar solo la imagen al slot
-            itemSlot.appendChild(img);
-            
-            // Adjuntar el slot al contenedor de la rejilla
-            gridContainer.appendChild(itemSlot);
-        });
-
-        // adjuntarlo al padre
-        if (gridContainer !== inventoryContainer) {
-            inventoryContainer.appendChild(gridContainer);
-        }
-    }
     }
 }
 
@@ -157,43 +147,38 @@ function renderizarEnemigos() {
 
 // Función para renderizar el inventario en la escena de batalla
 function renderizarInventarioBatalla() {
+    // El contenedor principal de todo el bloque de inventario
     const inventarioContainer = document.getElementById('inventory-display-battle');
     if (!inventarioContainer) return;
 
-    inventarioContainer.innerHTML = '<h4>Inventario:</h4>'; 
+    const slotsContainer = document.getElementById('battle-inventory-list');
+    
+    // Si la lista interna no existe, salimos
+    if (!slotsContainer) return;
 
+    slotsContainer.innerHTML = ''; // Limpiar la lista antes de dibujar
+
+    // Si no hay objetos, mostramos el mensaje (opcional, si quieres un mensaje)
     if (jugadoraActual.inventario.length === 0) {
-        inventarioContainer.innerHTML += '<p>No tienes objetos</p>';
         return;
     }
-
-    // Creamos el contenedor DIV que actuará como la fila flexible
-    const slotsContainer = document.createElement('div');
-    slotsContainer.classList.add('cart-grid'); 
-
+    
+    // Si hay ítems, los dibujamos
     jugadoraActual.inventario.forEach(producto => {
         // Creamos la casilla visual 
         const slot = document.createElement('div');
-        slot.classList.add('inventory-slot');
+        
+        slot.classList.add('item'); 
         
         // Creación de la imagen
         const img = document.createElement('img');
         img.src = producto.imagen;
         img.alt = producto.nombre;
         
-        // Estilos para que la imagen
-        img.style.width = '100%';
-        img.style.height = '100%';
-        img.style.objectFit = 'contain';
-
-        // Añade solo la imagen (sin texto)
         slot.appendChild(img);
-        
         slotsContainer.appendChild(slot);
     });
-    
-    //Reemplazamos la lista UL por el contenedor de casillas DIV
-    inventarioContainer.appendChild(slotsContainer);
+   
 }
 
 
@@ -329,38 +314,37 @@ function mostrarBatalla() {
 
 // Función renderizar batallas, escena 6 final 
 function renderizarEscenaFinal() {
-   const finalMessageElement = document.getElementById('final-message');
+   // Obtener elementos
+    const finalMessageElement = document.getElementById('final-message');
     const finalStatsElement = document.getElementById('final-stats');
     const finalInventoryElement = document.getElementById('final-inventory'); 
 
     // Verificación de existencia de elementos HTML
-     if (!finalMessageElement || !finalStatsElement || !finalInventoryElement) return;
+    if (!finalMessageElement || !finalStatsElement || !finalInventoryElement) return;
 
+    // Calculos
     const totalPuntos = jugadoraActual.puntos;
     const estaViva = jugadoraActual.puntosVida > 0;
-
-    // Calcula el rango (necesario para el mensaje)
+    
+    // Calcula el rango, enemigos derrotados, etc.
     const rangoJugador = distinguirJugador(totalPuntos); 
     const enemigosDerrotados = (indiceBatalla > 0 && jugadoraActual.puntosVida <= 0) ? indiceBatalla - 1 : indiceBatalla;
     let nombreCausanteDerrota = '';
-
+    
     if (!estaViva && indiceBatalla > 0) {
-    const indiceCausante = Math.max(0, indiceBatalla - 1);
-    nombreCausanteDerrota = enemigos[indiceCausante] ? enemigos[indiceCausante].nombre : '';
+        const indiceCausante = Math.max(0, indiceBatalla - 1);
+        nombreCausanteDerrota = enemigos[indiceCausante] ? enemigos[indiceCausante].nombre : '';
     }
 
+    
     // Determinar el Mensaje Principal (Victoria/Derrota)
     if (estaViva && indiceBatalla >= enemigos.length) {
-        finalMessageElement.innerHTML = `
-        <p>Has derrotado a ${enemigos.length} dragones.</p>`;
-        } else {
-        finalMessageElement.innerHTML = `
-        <p>Perdiste, fin de la batalla</p>
-        <p>Has sido derrotada por ${nombreCausanteDerrota}.</p>`;
+        finalMessageElement.innerHTML = `<p>Has derrotado a ${enemigos.length} dragones.</p>`;
+    } else {
+        finalMessageElement.innerHTML = `<p>Perdiste, fin de la batalla</p><p>Has sido derrotada por ${nombreCausanteDerrota}.</p>`;
     }
 
     // Mostrar las Estadísticas y Rango
-    // Construye el mensaje específico de Rango (Veterano/Novato)
     const mensajeRangoCompleto = (rangoJugador === "Veterano")
     ? `¡Felicidades! La jugadora ha conseguido ser una <strong>Veterana</strong>.`
     : `La jugadora es una <strong>Novata</strong>. ¡Sigue practicando!`;
@@ -372,39 +356,42 @@ function renderizarEscenaFinal() {
     <p><strong>Vida restante:</strong> ${Math.max(0, jugadoraActual.puntosVida)}</p> `;
 
 
-    // Renderizar Inventario Final, sí hay objetos comprados
+    // RENDERIZADO DEL INVENTARIO FINAL
+    
+    // Limpiamos el contenedor
+    finalInventoryElement.innerHTML = ''; 
+
+    // Crear y configurar el div
+    const contenedorLista = document.createElement('div');
+    contenedorLista.id = 'battle-inventory-list';
+    contenedorLista.classList.add('cart-grid');
+    finalInventoryElement.appendChild(contenedorLista); // Adjuntar al padre
+
+    // Si no hay objetos, mostramos solo un mensaje
     if (jugadoraActual.inventario.length === 0) {
-        finalInventoryElement.innerHTML = '<p>No hay objetos comprados>';
-        } else {
-        finalInventoryElement.innerHTML = '<h4>Inventario: </h4>';
-
-    // Contenedor tipo div en vez de ul
-        const contenedor = document.createElement('div');
-        contenedor.classList.add('inventory-grid'); 
-
+        contenedorLista.innerHTML = '<p style="text-align:center; padding: 10px;">No hay objetos comprados</p>';
+    } else {
+        // Llenar la lista con los ítems
         jugadoraActual.inventario.forEach(producto => {
             
             const itemDiv = document.createElement('div');
-            
-            itemDiv.classList.add('inventory-item');
+            itemDiv.classList.add('item');
 
             const img = document.createElement('img');
             img.src = producto.imagen;
             img.alt = producto.nombre;
-            img.classList.add('inventory-item-image'); 
-            itemDiv.appendChild(img); // imagenes del inventario
-            contenedor.appendChild(itemDiv);
+            
+            itemDiv.appendChild(img); 
+            contenedorLista.appendChild(itemDiv);
         });
-
-        finalInventoryElement.appendChild(contenedor);
- }
+    }
 
     // Mostrar botón reiniciar juego
     const btnRestart = document.getElementById('btn-restart');
-        if (btnRestart) {
+    if (btnRestart) {
         btnRestart.style.display = 'block'; 
-        }
     }
+}
 
 
 // Eventos y listeners 

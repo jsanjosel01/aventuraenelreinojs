@@ -29,7 +29,7 @@ body {
 
 /* CONTENEDOR PRINCIPAL */
 #game-container {
-    width: 80%;
+    width: 95%;
     max-width: 800px;
     height: 600px; /*ancho*/
     margin-top: 32px;
@@ -39,6 +39,7 @@ body {
     border-radius: 16px;
     border: 3px solid var(--secondary);
     box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    cursor: crosshair; /*ratón en forma de cruz*/
 }
 
 /*  ESCENAS  */
@@ -162,13 +163,14 @@ body {
     grid-template-columns: repeat(3, 1fr); 
     gap: 16px;
     justify-items: center;
-    /* margin-bottom: 24px; */
-    padding: 8px; 
+    
+    padding: 8px;
+    
 }
 
 /* Estilo para cada producto */
 .product-item {
-    min-width: 200px; 
+    min-width: 200px;
     background: var(--secondary);
     padding: 10px;
     border-radius: 12px;
@@ -200,112 +202,99 @@ body {
 
 /* Inventario */
 
-.cart-grid {
-    background: none; 
-    padding: 0;
-    border: none;
-    height: auto;
+#inventario-container {
+    background-color: var(--light);
+    padding: 12px;
+    border-radius: 8px; 
+    box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.5); /* Sombra */
     
-    margin-top: auto; 
-    margin-bottom: 20px; 
-    margin-left: auto;
-    margin-right: auto;
+    width: 80%;
+    margin: 20px auto; /* Centrar en la página */
+    
+}
 
-    width: 60%;
-    max-width: 500px; 
+
+#inventory-list-updated.cart-grid {
+    padding: 5px;
+    border-radius: 3px;
     display: flex;
-    justify-content: center;
-    gap: 8px;
+    flex-wrap: wrap; 
+    justify-content: flex-start; 
+    gap: 5px; 
+    
+    width: 100%; 
+    box-sizing: border-box; 
 }
 
-/* Estilo para cada casilla individual (slot) */
-.inventory-slot {
-    width: 60px;
-    height: 60px;
-    background: var(--dark); 
-    border: 3px solid var(--secondary); 
-    border-radius: 4px;
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    transition: transform 0.3s ease-in-out; 
+/* Casillas individual */
+.item {
+    flex-basis: calc(16.666% - 4.166px); 
+    aspect-ratio: 1 / 1; /*  aspecto un cuadrado. */
+    
+    border: 1px solid var(--dark-color);
+    cursor: crosshair;
+    
 }
-
-.inventory-slot:hover {
-    transform: scale(1.2); 
-    cursor: pointer;
-}
-
-
-#player-inventory-updated {
-    margin-top: 20px; 
-    padding-top: 15px; 
-   
-}
-
-
-
-/* Estilo para cada elemento del iventario */
-#inventory-list-updated li,
-#final-inventory div {
-    background-color: #5e400f;
-    margin: 6px 0;
-    padding: 8px;
-    border-radius: 6px;
-    color: var(--dark);
-    font-weight: bold;
-    display: flex;
-    align-items: center; 
-}
-
-/* Estilo y efecto hover/zoom para la imagen */
-.inventory-item-image {
-    width: 32px;
-    height: 32px;
+.item img {
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
-    margin-right: 10px;
-    border-radius: 4px;
-    transition: transform 0.3s ease-in-out; 
+
+    display: block; 
+    margin: auto;
+    pointer-events: none;
 }
 
-.inventory-item-image:hover {
-    transform: scale(1.5); 
-    cursor: pointer;
-}
 
-/* Estilos del Recuadro Marrón */
+/* estilo en el inventario escena 5 */
+
 #inventory-display-battle {
-    background: var(--primary);
-    color: var(--light); 
-    border: 2px solid var(--dark);
-    border-radius: 10px;
-    padding: 10px 20px; 
-
-    margin: 15px auto;
-    width: 60%; 
-  
-    text-align: left; 
+    background-color: var(--light);
+    padding: 12px;
+    border-radius: 8px; 
+    box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.5); /* Sombra */
+    
+    width: 80%;
+    margin: 20px auto; /* Centrar en la página */
 }
 
+#battle-inventory-list.cart-grid {
+    padding: 5px;
+    border-radius: 3px;
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: flex-start; 
+    gap: 5px; 
+    
+    width: 100%; 
+    box-sizing: border-box; 
+    min-height: 80px; 
+    
+}
+
+/* INVENTARIO FINAL  */
 
 #final-inventory {
-    background: var(--dark); 
-    color: var(--light); 
-    border: 3px solid var(--dark);
-    border-radius: 10px;
-    padding: 10px 20px; 
+    background-color: var(--light);
+    padding: 12px;
+    border-radius: 8px; 
+    box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.5); /* Sombra */
     
-    margin: 15px auto 20px auto; 
-    width: 60%; 
-    max-width: 500px; 
- 
-    text-align: left; 
-    display: flex; 
-    flex-direction: column;
+    width: 80%;
+    margin: 20px auto; /* Centrar en la página */
 }
+#final-inventory-list{
+    padding: 5px;
+    border-radius: 3px;
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: flex-start; 
+    gap: 5px; 
 
+    width: 100%; 
+    box-sizing: border-box; 
+    min-height: 80px; 
+}
 
 
 /* ENEMIGOS */
@@ -347,12 +336,12 @@ body {
 }
 
 
-/* BATALLA */
+/* BATALLA  ESCENA 5*/
 
 .battle-area {
     background: var(--secondary);
     width: 100%;
-    height: 100%;
+    height: 500px;
     padding: 12px;
     border-radius: 12px;
     color: black;
@@ -362,7 +351,6 @@ body {
     display: flex;
     flex-direction: column;
 
-    
 }
 
 .combatants-info {
@@ -386,8 +374,8 @@ body {
 }
 
 .combat-avatar {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 120px;
     object-fit: cover;
     border-radius: 12px;
     border: 2px solid var(--dark);
@@ -406,7 +394,6 @@ body {
 }
 
 #battle-enemy-name {
-    
     color: var(--dark);
 }
 
@@ -468,7 +455,7 @@ body {
 #final-stats{
     background: var(--secondary);
     width: 100%;
-    height: 200px;
+    height: 120px;
     padding: 12px;
     border-radius: 12px;
     color: var(--dark);
@@ -487,10 +474,7 @@ body {
 }
 
 
-
-
-
-/* RESPONSIVE  CAMBIAR NO FUNCIONA*/
+/* RESPONSIVE */
 
 @media (max-width: 640px) {
     #game-container {

@@ -138,6 +138,7 @@ main {
     cursor: pointer;
     margin: auto;
     margin-top: 12px;
+    border: 1px solid;
     
     transition: 0.2s; /* efecto */
 }
@@ -150,14 +151,12 @@ main {
 /* botón AÑADIR */
 .btn-add {
     background: var(--accent);
-    color: var(--dark);
-    border: 1px solid var(--accent);
+    border: 1px solid var(--dark);
 }
 
 /* botón RETIRAR */
 .btn-remove {
     background: var(--light); /* Fondo claro */
-    color: var(--dark);
     border: 1px solid var(--dark);
 }
 
@@ -262,7 +261,7 @@ main {
 
 /* Inventario Escena 3*/
 #inventario-container-stats {
-     background-color: var(--light);
+    background-color: var(--light);
     padding: 12px;
     border-radius: 8px; 
     box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.5); /* Sombra */

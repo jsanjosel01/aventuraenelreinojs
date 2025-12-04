@@ -555,7 +555,7 @@ main {
     
     .market-grid,
     .enemies-grid {
-        grid-template-columns: repeat(1, 1fr); 
+        grid-template-columns: repeat(2, 1fr); 
         gap: 12px; /* Reducir el espacio entre elementos */
     }
 
@@ -577,7 +577,6 @@ main {
         font-size: 1.5rem;
     }
 
-    /* Opcional: Reducir el tamaño de los contenedores de inventario */
     #inventario-container,
     #inventario-container-stats,
     #inventory-display-battle,

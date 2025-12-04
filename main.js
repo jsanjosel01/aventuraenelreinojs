@@ -19,7 +19,7 @@ let indiceBatalla = 0; //indice del combate
 
 function inicializarJuego() {
     // 1. Crear jugadora
-    jugadoraActual = new Jugador("Vikinga", "img/astrid1.png");
+    jugadoraActual = new Jugador("Vikinga", "img/astrid.png");
 
     // 2. Crear enemigos
     enemigos = [

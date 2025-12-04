@@ -547,15 +547,20 @@ main {
     #game-container {
         padding: 12px;
     }
+     .combatants-info {
+        flex-direction: column;
+        gap: 16px;
+    }
 
     .stats-grid {
         width: 100%; 
-        margin: 12px auto 0 auto; 
+        margin: 12px auto 0 auto;
+        grid-template-columns: repeat(2, 1fr);
     }
     
     .market-grid,
     .enemies-grid {
-        grid-template-columns: repeat(2, 1fr); 
+        grid-template-columns: repeat(1, 1fr); 
         gap: 12px; /* Reducir el espacio entre elementos */
     }
 
@@ -568,13 +573,13 @@ main {
         flex-basis: calc(25% - 3.75px); 
     }
 
-    .combatants-info {
-        flex-direction: column;
-        gap: 16px;
-    }
-
     .game-scene h3 {
         font-size: 1.5rem;
+    }
+
+    #final-stats {
+        height: auto; 
+        min-height: 120px;
     }
 
     #inventario-container,

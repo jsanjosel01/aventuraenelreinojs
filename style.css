@@ -531,7 +531,7 @@ main {
 
 /* RESPONSIVE */
 
-@media (max-width: 640px) {
+/* @media (max-width: 640px) {
     #game-container {
         padding: 12px;
     }
@@ -539,5 +539,51 @@ main {
     .combatants-info {
         flex-direction: column;
         gap: 16px;
+    }
+} */
+
+
+@media (max-width: 640px) {
+    #game-container {
+        padding: 12px;
+    }
+
+    .stats-grid {
+        width: 100%; 
+        margin: 12px auto 0 auto; 
+    }
+    
+    .market-grid,
+    .enemies-grid {
+        grid-template-columns: repeat(1, 1fr); 
+        gap: 12px; /* Reducir el espacio entre elementos */
+    }
+
+    .product-item,
+    .enemy-item {
+        min-width: 100%; 
+    }
+
+    .item {
+        flex-basis: calc(25% - 3.75px); 
+    }
+
+    .combatants-info {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .game-scene h3 {
+        font-size: 1.5rem;
+    }
+
+    /* Opcional: Reducir el tamaño de los contenedores de inventario */
+    #inventario-container,
+    #inventario-container-stats,
+    #inventory-display-battle,
+    #final-inventory {
+        width: 100%; 
+        padding: 8px;
+        margin: 10px auto; 
     }
 }

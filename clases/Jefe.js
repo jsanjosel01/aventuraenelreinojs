@@ -19,8 +19,10 @@ export class Jefe extends Enemigo {
      * @param {number} [multiplicadorDano=1.2] - Multiplicador de daño adicional. Opcional.
      */
     
-    constructor(nombre, avatar, nivelAtaque, puntosVida, multiplicadorDano = 1.2) { //Valor por defecto
+    constructor(nombre, avatar, nivelAtaque, puntosVida, multiplicadorDano = 1.2, dinero) { //Valor por defecto
         super(nombre, avatar, nivelAtaque, puntosVida);
         this.multiplicadorDano = multiplicadorDano;
+
+        this.dinero = dinero;
     }
 }

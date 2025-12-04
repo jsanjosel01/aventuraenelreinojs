@@ -25,6 +25,8 @@ export default class Jugador {
         this.vidaMaxima = vidaInicial;
         
         this.puntosVida = vidaInicial;
+    
+        this.dinero=500;
     }
 
     //Añadir un objeto al inventario

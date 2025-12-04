@@ -15,11 +15,13 @@ export class Enemigo {
      * @param {number} puntosVida - Puntos de vida iniciales y actuales.
      */
     
-    constructor(nombre, avatar, nivelAtaque, puntosVida) {
+    constructor(nombre, avatar, nivelAtaque, puntosVida, dinero) {
         this.nombre = nombre;
         this.avatar = avatar;
         this.nivelAtaque = nivelAtaque;
         this.puntosVida = puntosVida;
-        this.vidaInicial = puntosVida; 
+        this.vidaInicial = puntosVida;
+        
+        this.dinero = dinero;
     }
 }

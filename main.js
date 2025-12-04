@@ -9,6 +9,10 @@ import { cambiarEscena } from './utils/utils.js';
 import { combate } from './model/batalla.js';
 import { distinguirJugador } from './model/ranking.js';
 
+import { initRegistro } from './model/registro.js';
+
+
+
 let jugadoraActual = null;
 let enemigos = [];
 let productosdelMercado = []
@@ -17,16 +21,20 @@ let indiceBatalla = 0; //indice del combate
 
 // Funcion Iniciar el juego, creacion de jugador + escena 1
 
+
 function inicializarJuego() {
     // 1. Crear jugadora
-    jugadoraActual = new Jugador("Vikinga", "img/astrid.png");
+    // jugadoraActual = new Jugador("Vikinga", "img/astrid.png");
 
+    // initRegistro();
+    jugadoraActual= new Jugador("", "img/astrid.png");
+    
     // 2. Crear enemigos
     enemigos = [
-        new Enemigo("Fireworn", "img/d3.jpg", 8, 30),
-        new Enemigo("Sreaming Death", "img/d4.jpg", 9, 35),
-        new Jefe("Death song", "img/d2.jpg", 15, 80),
-        new Jefe("Hideous Zippleback", "img/d8.jpg", 20, 100)
+        new Enemigo("Fireworn", "img/d3.jpg", 8, 30, 8),
+        new Enemigo("Sreaming Death", "img/d4.jpg", 9, 35, 10),
+        new Jefe("Death song", "img/d2.jpg", 15, 80, 150),
+        new Jefe("Hideous Zippleback", "img/d8.jpg", 20, 100, 120)
     ];
 
     // Mostrar la ESCENA 1.
@@ -123,6 +131,7 @@ function renderizarProductosMercado(productos) {
             <p style="font-size:0.8em;">+${producto.bonus} ${producto.tipo}</p>
             <p>${precioFormateado}</p>
             <button class="btn-add btn-toggle">Añadir</button>
+            <p>Dinero disponible: </p>
         `;
 
         listContainer.appendChild(productElement);
@@ -273,7 +282,7 @@ function mostrarBatalla() {
     // Ejecuta el combate (Un turno/golpe)
     const resultado = combate(enemigoActual, jugadoraActual);
     const vidaEnemigoActual = Math.max(0, resultado.vidaRestanteEnemigo);
-    
+
     jugadoraActual.puntosVida = Math.max(0, resultado.vidaRestanteJugador);
 
     // Actualizar UI de la Batalla (Vidas y Inventario)
@@ -283,6 +292,7 @@ function mostrarBatalla() {
 
     // Mostrar resultados
     let ganadorTexto = '';
+    
     
     if (resultado.ganador === jugadoraActual.nombre) {
         ganadorTexto = `${jugadoraActual.nombre}`;
@@ -296,6 +306,7 @@ function mostrarBatalla() {
     document.getElementById('battle-result').innerHTML = `
         <p><strong>Ganador:</strong> ${ganadorTexto}</p>
         <p><strong>Puntos ganados:</strong> ${resultado.puntos}</p>
+        <p><strong>Dinero obtenido:</strong></p>
     `;
 
     // Mostrar los Puntos totales
@@ -447,6 +458,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Botón iniciar aventura al Mercado (Escena 1 a la Escena 2)
     const btnStart = document.getElementById("btn-start-adventure");
+    const btnregistrar = document.getElementById("botonRegistrar");
+
     if (btnStart) {
         btnStart.addEventListener("click", () => {
             cambiarEscena("scene-market");
@@ -454,7 +467,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // Actualiza el inventario
             actualizarVistaJugador('scene-market'); 
         });
+
     }
+
+    // registro
+        btnregistrar.addEventListener('click', () => {
+        cambiarEscena("scene-market");
+    });
+
+    
+
+
 
     // btn Añadir/Retirar
     document.addEventListener("click", (event) => {

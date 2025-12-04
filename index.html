@@ -15,6 +15,7 @@
     <script type="module" src="/utils/utils.js"></script>
 
     <script type="module" src="/model/mercado.js"></script>
+    <script type="module"  src="/model/registro.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -35,13 +36,47 @@
                 <img src="img/astrid1.png" alt="Avatar de la jugadora" id="player-avatar-img">
                 <p><span id="player-name-start"><b>Vikinga</b></span></p>
                 
-                <div class="stats-grid">
+                <!-- <div class="stats-grid">
                     <div class="stat-box">Ataque: <span id="stat-attack-start">0</span></div>
                     <div class="stat-box">Defensa: <span id="stat-defense-start">0</span></div>
                     <div class="stat-box">Vida: <span id="stat-life-start">100</span></div>
                     <div class="stat-box">Puntos: <span id="stat-points-start">0</span></div>
+                </div> -->
+
+                <!-- Formulario -->
+                <div class="form-group">
+                <label>Nombre: </label>
+                <input type="text" id="username">
+                <div class="error" id="usernameError" required minlength="20"></div>
                 </div>
-                
+
+                <div class="form-group">
+                <label>Ataque: </label>
+                <input type="number" id="ataque" >
+                <div class="error" id="ataqueError" required minlength="0"></div>
+                </div>
+
+                <div class="form-group">
+                <label>Defensa: </label>
+                <input type="number" id="defensa" >
+                <div class="error" id="ataqueError" required minlength="0"></div>
+                </div>
+
+                <div class="form-group">
+                <label>Vida: </label>
+                <input type="number" id="vida" >
+                <div class="error" id="vidaError" required minlength="99"></div>
+                </div>
+
+                <div class="form-group">
+                <label>Cantidad Total: </label>
+                <input type="number" id="cantidadTotal" >
+                <div class="error" id="cantidadTotalError" min="0" max="110"></div>
+                </div>
+
+                <button id="botonRegistrar">Registrar</button>
+                <p class="mensaje" id="mensajeRegistro"></p>
+
                 <button id="btn-start-adventure" class="btn-continue">Continuar</button>
             </div>
         </section>
@@ -79,10 +114,10 @@
                 <p><span id="player-name-updated"><b>Vikinga</b></span></p>
 
                 <div class="stats-grid">
-                    <div class="stat-box">Ataque: <span id="stat-attack-updated">0</span></div>
-                    <div class="stat-box">Defensa: <span id="stat-defense-updated">0</span></div>
-                    <div class="stat-box">Vida Total: <span id="stat-life-updated">100</span></div> 
-                    <div class="stat-box">Puntos: <span id="stat-points-updated">0</span></div>
+                    <div class="stat-box">Ataque: <span id="stat-attack-updated"></span></div>
+                    <div class="stat-box">Defensa: <span id="stat-defense-updated"></span></div>
+                    <div class="stat-box">Vida Total: <span id="stat-life-updated"></span></div> 
+                    <div class="stat-box">Puntos: <span id="stat-points-updated"></span></div>
                 </div>
 
                 <!-- Inventario -->
@@ -162,6 +197,9 @@
                     </div>
             </div>
             
+
+            <button id="botonMostrarRanking" >Mostrar el ranking</button> 
+
             <button id="btn-restart" class="btn-continue">Reiniciar Juego</button> 
 
         </section>

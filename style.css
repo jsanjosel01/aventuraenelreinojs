@@ -531,25 +531,20 @@ main {
 
 /* RESPONSIVE */
 
-/* @media (max-width: 640px) {
-    #game-container {
-        padding: 12px;
-    }
-
-    .combatants-info {
-        flex-direction: column;
-        gap: 16px;
-    }
-} */
-
-
 @media (max-width: 640px) {
     #game-container {
         padding: 12px;
     }
-     .combatants-info {
+    
+    
+    .combatants-info {
         flex-direction: column;
-        gap: 16px;
+        gap: 16px; 
+    }
+
+    .battle-area {
+        height: auto;
+        min-height: 400px;
     }
 
     .stats-grid {
@@ -561,7 +556,7 @@ main {
     .market-grid,
     .enemies-grid {
         grid-template-columns: repeat(1, 1fr); 
-        gap: 12px; /* Reducir el espacio entre elementos */
+        gap: 12px;
     }
 
     .product-item,

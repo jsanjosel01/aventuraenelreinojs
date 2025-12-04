@@ -1,7 +1,27 @@
 // Batallas
+
+/**
+ * @fileoverview Lógica principal para simular un único turno de combate.
+ * @exports combate
+ */
+
 import { Jefe } from "../clases/Jefe.js";
 
 //Funcion combate, calcular daño
+
+/**
+ * Simula un único turno de combate entre un enemigo y el jugador.
+ * Actualiza los puntos de vida de ambos combatientes en la instancia del objeto.
+ * * @param {Enemigo|Jefe} enemigo - La instancia del enemigo o jefe.
+ * @param {Jugador} jugador - La instancia del jugador.
+ * @returns {{
+ * ganador: string,
+ * puntos: number,
+ * vidaRestanteJugador: number,
+ * vidaRestanteEnemigo: number
+ * }} Objeto con el resultado del turno y las vidas restantes.
+ */
+
 export function combate(enemigo, jugador) {
     const ataqueJugador = jugador.obtenerAtaqueTotal();
     const defensaJugador = jugador.obtenerDefensaTotal();

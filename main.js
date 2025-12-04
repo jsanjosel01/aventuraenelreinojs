@@ -16,6 +16,7 @@ let productosdelMercado = []
 let indiceBatalla = 0; //indice del combate
 
 // Funcion Iniciar el juego, creacion de jugador + escena 1
+
 function inicializarJuego() {
     // 1. Crear jugadora
     jugadoraActual = new Jugador("Vikinga", "img/astrid1.png");
